@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package unp.v1;
+
+option go_package = "github.com/akatosh/proto/unp/v1;unpv1";
+
+message NodeCapabilities {
+  string device_type = 1;         // gpu, cpu, mobile, iot
+  string gpu_model = 2;           // optional
+  uint32 cpu_cores = 3;
+  uint64 ram_bytes = 4;
+  uint64 vram_bytes = 5;
+  string sensors = 6;             // csv for simplicity v0
+  uint64 bandwidth_mbps = 7;
+}
+
+message RegisterNodeRequest {
+  bytes pubkey = 1;               // ed25519 pubkey
+  NodeCapabilities caps = 2;
+  uint64 geohash_bucket = 3;
+  uint32 attestation_method = 4;  // enum later
+  bytes signature = 5;            // over serialized body
+}
+message RegisterNodeResponse { string node_id = 1; }
+
+message Heartbeat {
+  bytes pubkey = 1;
+  int64 timestamp_ms = 2;
+  double cpu_util = 3;
+  double mem_util = 4;
+  double gpu_util = 5;
+  double power_watts = 6;
+  bytes signature = 7;
+}
+message HeartbeatAck { bool ok = 1; string msg = 2; }
+
+message WorkRequest { bytes pubkey = 1; }
+message WorkAssignment {
+  string job_id = 1;
+  string kind = 2;         // inference, batch, sensing
+  string payload_url = 3;  // v0 link to payload
+  bytes payload_hash = 4;  // sha256 of payload
+  uint64 price_per_unit = 5; // lamports per unit
+  uint32 units = 6;        // granularity depends on job kind
+}
+
+message WorkReceipt {
+  string job_id = 1;
+  bytes pubkey = 2;
+  bytes result_hash = 3;
+  uint64 metering_units = 4;
+  uint32 green_multiplier_bps = 5; // basis points, e.g. 11000 = 1.1x
+  bytes signature = 6;
+}
+message ReceiptAck { bool ok = 1; string msg = 2; }
+
+message PostJobRequest {
+  string kind = 1;
+  string payload_url = 2;
+  uint64 max_price_per_unit = 3;
+  uint64 budget = 4; // in lamports or USDC minor unit
+  string region = 5; // optional filter
+}
+message PostJobResponse { string job_id = 1; }
+
+message GetQuotesRequest { string kind = 1; string region = 2; }
+message Quote { string kind = 1; uint64 median_price = 2; uint32 capacity = 3; }
+message GetQuotesResponse { repeated Quote quotes = 1; }
+
+message EscrowRequest { string job_id = 1; uint64 amount = 2; string currency = 3; }
+message EscrowResponse { bool ok = 1; string msg = 2; }
+
+service Orchestrator {
+  rpc RegisterNode (RegisterNodeRequest) returns (RegisterNodeResponse);
+  rpc SendHeartbeat (Heartbeat) returns (HeartbeatAck);
+  rpc RequestWork (WorkRequest) returns (WorkAssignment);
+  rpc SubmitReceipt (WorkReceipt) returns (ReceiptAck);
+}
+
+service Marketplace {
+  rpc PostJob (PostJobRequest) returns (PostJobResponse);
+  rpc GetQuotes (GetQuotesRequest) returns (GetQuotesResponse);
+  rpc Escrow (EscrowRequest) returns (EscrowResponse);
+}
+
