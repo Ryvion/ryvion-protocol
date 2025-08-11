@@ -42,6 +42,9 @@ message WorkAssignment {
   bytes payload_hash = 4;  // sha256 of payload
   uint64 price_per_unit = 5; // lamports per unit
   uint32 units = 6;        // granularity depends on job kind
+  // Optional v0.2: OCI runner
+  string image = 7;        // container image ref (e.g., ghcr.io/acme/llm-runner:0.1.0)
+  string spec_json = 8;    // JobSpec JSON per docs/runner-contract.md
 }
 
 message WorkReceipt {
@@ -82,4 +85,3 @@ service Marketplace {
   rpc GetQuotes (GetQuotesRequest) returns (GetQuotesResponse);
   rpc Escrow (EscrowRequest) returns (EscrowResponse);
 }
-
