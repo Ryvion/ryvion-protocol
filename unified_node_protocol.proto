@@ -1,17 +1,32 @@
 syntax = "proto3";
 
-package unp.v1;
+package ryvion.depin.v1;
 
-option go_package = "github.com/akatosh/proto/unp/v1;unpv1";
+option go_package = "github.com/Ryvion/proto/depin/v1;depinv1";
+
+// DePIN Device Categories
+enum DeviceClass {
+  DEVICE_CLASS_UNSPECIFIED = 0;
+  DEVICE_CLASS_GPU_CLUSTER = 1;    // High-end GPU farms for AI inference
+  DEVICE_CLASS_EDGE_AI = 2;        // Edge AI devices (phones, IoT)
+  DEVICE_CLASS_STORAGE = 3;        // Distributed storage nodes
+  DEVICE_CLASS_COMPUTE = 4;        // General compute nodes
+  DEVICE_CLASS_SENSOR = 5;         // IoT sensor networks
+  DEVICE_CLASS_RELAY = 6;          // Network relay/bandwidth nodes
+}
 
 message NodeCapabilities {
-  string device_type = 1;         // gpu, cpu, mobile, iot
-  string gpu_model = 2;           // optional
-  uint32 cpu_cores = 3;
-  uint64 ram_bytes = 4;
-  uint64 vram_bytes = 5;
-  string sensors = 6;             // csv for simplicity v0
-  uint64 bandwidth_mbps = 7;
+  DeviceClass device_class = 1;
+  string gpu_model = 2;
+  uint32 gpu_cc = 3;              // CUDA compute capability
+  uint32 cpu_cores = 4;
+  uint64 ram_bytes = 5;
+  uint64 vram_bytes = 6;
+  uint64 storage_bytes = 7;       // Available storage for DePIN
+  uint64 bandwidth_mbps = 8;
+  repeated string ai_models = 9;   // Supported AI model types
+  bool green_certified = 10;      // Renewable energy attestation
+  double power_efficiency = 11;   // Performance per watt
 }
 
 message RegisterNodeRequest {
@@ -57,14 +72,34 @@ message WorkReceipt {
 }
 message ReceiptAck { bool ok = 1; string msg = 2; }
 
-message PostJobRequest {
-  string kind = 1;
-  string payload_url = 2;
-  uint64 max_price_per_unit = 3;
-  uint64 budget = 4; // in lamports or USDC minor unit
-  string region = 5; // optional filter
+// DePAI Job Categories
+enum JobKind {
+  JOB_KIND_UNSPECIFIED = 0;
+  JOB_KIND_LLM_INFERENCE = 1;      // Large Language Model inference
+  JOB_KIND_IMAGE_GENERATION = 2;   // AI image/art generation
+  JOB_KIND_VIDEO_TRANSCODE = 3;    // Video processing pipeline
+  JOB_KIND_DATA_PROCESSING = 4;    // ETL and data transformation
+  JOB_KIND_MODEL_TRAINING = 5;     // Distributed AI model training
+  JOB_KIND_EMBEDDING = 6;          // Vector embeddings generation
+  JOB_KIND_IOT_AGGREGATION = 7;    // IoT sensor data processing
+  JOB_KIND_STORAGE_REPLICATION = 8; // DePIN storage replication
 }
-message PostJobResponse { string job_id = 1; }
+
+message PostJobRequest {
+  JobKind kind = 1;
+  string payload_url = 2;          // job spec / docker image
+  uint64 max_price_per_unit = 3;   // max price willing to pay
+  uint64 budget = 4;               // total budget in micro-tokens
+  string region = 5;               // geographic preference
+  repeated string required_capabilities = 6; // e.g., ["cuda", "llama-2-7b"]
+  bool green_only = 7;             // require renewable energy nodes
+  uint32 min_reputation = 8;       // minimum node reputation score
+}
+message PostJobResponse { 
+  string job_id = 1; 
+  uint64 estimated_cost = 2;       // estimated total cost
+  uint32 estimated_duration_ms = 3; // estimated completion time
+}
 
 message GetQuotesRequest { string kind = 1; string region = 2; }
 message Quote { string kind = 1; uint64 median_price = 2; uint32 capacity = 3; }
@@ -73,15 +108,71 @@ message GetQuotesResponse { repeated Quote quotes = 1; }
 message EscrowRequest { string job_id = 1; uint64 amount = 2; string currency = 3; }
 message EscrowResponse { bool ok = 1; string msg = 2; }
 
-service Orchestrator {
+// Core DePIN orchestration service
+service DePINOrchestrator {
   rpc RegisterNode (RegisterNodeRequest) returns (RegisterNodeResponse);
   rpc SendHeartbeat (Heartbeat) returns (HeartbeatAck);
   rpc RequestWork (WorkRequest) returns (WorkAssignment);
   rpc SubmitReceipt (WorkReceipt) returns (ReceiptAck);
+  
+  // Advanced DePIN features
+  rpc GetNetworkHealth (NetworkHealthRequest) returns (NetworkHealthResponse);
+  rpc ValidateGreenCertificate (GreenCertRequest) returns (GreenCertResponse);
 }
 
-service Marketplace {
+// DePAI job marketplace service  
+service DePAIMarketplace {
   rpc PostJob (PostJobRequest) returns (PostJobResponse);
   rpc GetQuotes (GetQuotesRequest) returns (GetQuotesResponse);
   rpc Escrow (EscrowRequest) returns (EscrowResponse);
+  
+  // AI-specific features
+  rpc GetModelCapabilities (ModelCapabilitiesRequest) returns (ModelCapabilitiesResponse);
+  rpc EstimateJobCost (EstimateRequest) returns (EstimateResponse);
+}
+
+// Network health monitoring
+message NetworkHealthRequest { string region = 1; }
+message NetworkHealthResponse {
+  uint32 active_nodes = 1;
+  uint32 total_compute_units = 2;
+  double average_utilization = 3;
+  uint32 jobs_in_queue = 4;
+}
+
+// Green energy certification
+message GreenCertRequest {
+  bytes node_pubkey = 1;
+  string energy_source = 2;      // "solar", "wind", "hydro"
+  bytes attestation_proof = 3;   // cryptographic proof
+}
+message GreenCertResponse {
+  bool certified = 1;
+  uint64 expires_timestamp = 2;
+  double carbon_credits = 3;
+}
+
+// AI model capabilities discovery
+message ModelCapabilitiesRequest { repeated string model_names = 1; }
+message ModelCapabilitiesResponse {
+  repeated ModelInfo available_models = 1;
+}
+message ModelInfo {
+  string name = 1;                // "llama-2-70b", "stable-diffusion-xl"
+  uint32 min_vram_gb = 2;         // minimum VRAM required
+  uint32 available_nodes = 3;     // nodes that can run this model
+  uint64 avg_price_per_token = 4; // average pricing
+}
+
+// Job cost estimation
+message EstimateRequest {
+  JobKind kind = 1;
+  uint32 estimated_tokens = 2;    // for LLM jobs
+  uint32 estimated_images = 3;    // for image generation
+  uint32 estimated_duration_ms = 4;
+}
+message EstimateResponse {
+  uint64 min_cost = 1;
+  uint64 max_cost = 2;
+  uint64 recommended_budget = 3;
 }

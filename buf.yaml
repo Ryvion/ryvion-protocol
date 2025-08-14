@@ -1,5 +1,5 @@
 version: v1
-name: buf.build/akatosh/unp
+name: buf.build/ryvion/depin
 deps:
   - buf.build/googleapis/googleapis
 
