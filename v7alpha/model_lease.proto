@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package ryvion.v7alpha;
+
+import "v7alpha/common.proto";
+
+option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+
+// model_lease.proto defines additive V7 alpha contracts for model residency,
+// lease state, and readiness challenges. Model leases help hub-orch and
+// node-agent avoid VRAM thrashing by making residency explicit.
+//
+// Readiness challenges are residency and warmth signals before hot assignment.
+// They do not prove full model correctness. Sparse checks are placeholders for
+// future model-specific validation and must reference hashed content rather
+// than raw prompt text.
+
+// ModelLeaseState describes the lifecycle of a model residency lease.
+enum ModelLeaseState {
+  MODEL_LEASE_STATE_UNSPECIFIED = 0;
+  MODEL_LEASE_STATE_UNPINNED = 1;
+  MODEL_LEASE_STATE_BIDDING = 2;
+  MODEL_LEASE_STATE_LOADING = 3;
+  MODEL_LEASE_STATE_WARMUP = 4;
+  MODEL_LEASE_STATE_RESIDENT = 5;
+  MODEL_LEASE_STATE_DRAINING = 6;
+  MODEL_LEASE_STATE_EVICTING = 7;
+  MODEL_LEASE_STATE_FAILED = 8;
+}
+
+// ModelLease records node-local residency for a specific model and
+// quantization.
+message ModelLease {
+  string lease_id = 1;
+  string node_id = 2;
+  string model_id = 3;
+  string quantization_id = 4;
+  ModelLeaseState state = 5;
+  uint64 vram_reserved_bytes = 6;
+  int64 min_residency_until_unix_ms = 7;
+  int64 lease_expires_at_unix_ms = 8;
+  int64 readiness_reward_cents_per_minute = 9;
+  int64 updated_at_unix_ms = 10;
+}
+
+// ModelResidencySummary reports whether one resident model can accept hot
+// requests without reloading.
+message ModelResidencySummary {
+  string model_id = 1;
+  string quantization_id = 2;
+  ModelLeaseState state = 3;
+  uint64 vram_reserved_bytes = 4;
+  bool can_accept_hot_request = 5;
+  int64 lease_expires_at_unix_ms = 6;
+}
+
+// ModelResidencyReport summarizes node-local model residency state.
+message ModelResidencyReport {
+  string node_id = 1;
+  repeated ModelResidencySummary models = 2;
+  int64 generated_at_unix_ms = 3;
+}
+
+// ReadinessDecision records the outcome of a readiness challenge.
+enum ReadinessDecision {
+  READINESS_DECISION_UNSPECIFIED = 0;
+  READINESS_DECISION_READY = 1;
+  READINESS_DECISION_NOT_READY = 2;
+  READINESS_DECISION_EXPIRED = 3;
+  READINESS_DECISION_MISMATCH = 4;
+  READINESS_DECISION_TOO_SLOW = 5;
+}
+
+// ReadinessChallenge asks node-agent to prove model residency and warmth
+// without embedding raw prompt text.
+message ReadinessChallenge {
+  string challenge_id = 1;
+  string node_id = 2;
+  string model_id = 3;
+  string quantization_id = 4;
+  int64 issued_at_unix_ms = 5;
+  int64 expires_at_unix_ms = 6;
+  double required_latency_ms = 7;
+  HashRef prompt_hash = 8;
+  HashRef sparse_logit_check_hash = 9;
+  string nonce = 10;
+}
+
+// ReadinessResponse records the node-agent response to a residency and warmth
+// challenge.
+message ReadinessResponse {
+  string challenge_id = 1;
+  string node_id = 2;
+  string model_id = 3;
+  string quantization_id = 4;
+  int64 responded_at_unix_ms = 5;
+  double latency_ms = 6;
+  HashRef sparse_logit_check_hash = 7;
+  ReadinessDecision decision = 8;
+  string reason = 9;
+  bytes signature = 10; // optional future signature
+}
