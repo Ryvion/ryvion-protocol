@@ -4,12 +4,10 @@ package ryvion.v7alpha;
 
 option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
 
-import "v7alpha/common.proto";
 import "v7alpha/capability.proto";
 import "v7alpha/network.proto";
 import "v7alpha/model_lease.proto";
 import "v7alpha/objectcdn.proto";
-import "v7alpha/evidence.proto";
 
 // heartbeat.proto defines additive V7 alpha heartbeat extension payloads.
 //

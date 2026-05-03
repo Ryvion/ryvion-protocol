@@ -4,8 +4,6 @@ package ryvion.v7alpha;
 
 option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
 
-import "v7alpha/common.proto";
-
 // CapabilityPassport reports factual node-agent capabilities for future hub-orch
 // placement and risk decisions. It must not contain secrets, admin keys, bind
 // tokens, or scheduling decisions.

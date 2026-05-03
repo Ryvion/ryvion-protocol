@@ -4,8 +4,6 @@ package ryvion.v7alpha;
 
 option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
 
-import "v7alpha/common.proto";
-
 // network.proto defines additive V7 alpha contracts for measured node-agent
 // network reports and future hub-orch PathOracle scoring. These messages are
 // measurements and scoring inputs, not networking implementation or scheduling

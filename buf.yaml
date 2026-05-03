@@ -2,4 +2,16 @@ version: v1
 name: buf.build/ryvion/depin
 deps:
   - buf.build/googleapis/googleapis
-
+lint:
+  use:
+    - STANDARD
+  ignore_only:
+    PACKAGE_DIRECTORY_MATCH:
+      - unified_node_protocol.proto
+      - v7alpha
+    SERVICE_SUFFIX:
+      - unified_node_protocol.proto
+    RPC_REQUEST_STANDARD_NAME:
+      - unified_node_protocol.proto
+    RPC_RESPONSE_STANDARD_NAME:
+      - unified_node_protocol.proto
