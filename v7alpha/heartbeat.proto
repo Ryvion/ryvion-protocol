@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package ryvion.v7alpha;
+
+option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+
+import "v7alpha/common.proto";
+import "v7alpha/capability.proto";
+import "v7alpha/network.proto";
+import "v7alpha/model_lease.proto";
+import "v7alpha/objectcdn.proto";
+import "v7alpha/evidence.proto";
+
+// heartbeat.proto defines additive V7 alpha heartbeat extension payloads.
+//
+// These messages are optional during rollout. Node-agent may omit any field
+// until it supports the corresponding V7 feature, and older hub-orch versions
+// may ignore V7 heartbeat payloads entirely.
+//
+// Heartbeat payloads must not include secrets, demo keys, admin keys, bind
+// tokens, raw prompts, or raw transcript text.
+
+// ModelLeaseSummary reports aggregate model lease state without exposing
+// scheduler internals.
+message ModelLeaseSummary {
+  bool supports_model_lease = 1;
+  uint32 total_leases = 2;
+  uint32 resident_leases = 3;
+  uint32 loading_leases = 4;
+  uint32 draining_leases = 5;
+  uint32 failed_leases = 6;
+  repeated string resident_model_ids = 7;
+  uint64 vram_reserved_bytes = 8;
+  int64 updated_at_unix_ms = 9;
+}
+
+// CASSummary reports local content-addressed storage totals for heartbeat
+// routing hints. It must not include local secret paths or object bytes.
+message CASSummary {
+  bool enabled = 1;
+  uint32 object_count = 2;
+  uint64 total_bytes = 3;
+  uint64 max_bytes = 4;
+  int64 updated_at_unix_ms = 5;
+}
+
+// SandboxPolicySummary reports local sandbox and runner policy posture.
+message SandboxPolicySummary {
+  bool rejects_unsafe_pickle = 1;
+  bool runner_allowlist_enabled = 2;
+  bool network_isolation_supported = 3;
+  bool filesystem_isolation_planned = 4;
+  string python_source_decision = 5;
+  repeated string network_allowed_runner_kinds = 6;
+  repeated string filesystem_write_allowed_runner_kinds = 7;
+  bool allows_unknown_trusted_allowlisted = 8;
+  bool allows_pytorch_pickle_trusted_allowlisted = 9;
+}
+
+// V7HeartbeatPayload wraps optional V7 heartbeat extension data.
+//
+// All fields are optional for gradual rollout. Older hub-orch versions may
+// ignore this wrapper while continuing to process the existing v1 Heartbeat.
+// No secret fields are allowed in this message.
+message V7HeartbeatPayload {
+  string schema_version = 1;
+  CapabilityPassport capability_passport = 2;
+  NetworkProfile network_profile = 3;
+  ModelLeaseSummary model_lease_summary = 4;
+  CASSummary cas_summary = 5;
+  SandboxPolicySummary sandbox_policy_summary = 6;
+  EvidenceCapabilitySummary evidence_capability_summary = 7;
+  CacheAdvertisement cache_advertisement = 8;
+  ModelResidencyReport model_residency = 9;
+  PathProbeReport path_probe_report = 10;
+  int64 created_at_unix_ms = 11;
+}
