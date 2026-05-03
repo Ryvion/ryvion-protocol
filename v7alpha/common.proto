@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package ryvion.v7alpha;
+
+option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+
+// common.proto carries protocol identity primitives only.
+//
+// CIDs should point to content-addressed RCOG/ObjectCDN artifacts. Raw prompt
+// text, raw transcript text, secrets, and other sensitive payloads must not be
+// embedded in these messages.
+
+// CID identifies a content-addressed protocol object.
+message CID {
+  // Expected format is sha256:<64 lowercase hex>.
+  string value = 1;
+  // Usually sha256.
+  string codec = 2;
+  // Optional semantic kind for the referenced artifact.
+  string kind = 3;
+}
+
+// HashRef references hashed content without embedding the content itself.
+message HashRef {
+  HashCodec codec = 1;
+  // Hex or sha256:<hex>, depending on context.
+  string value = 2;
+  uint64 size_bytes = 3;
+}
+
+// ObjectRef references an RCOG/ObjectCDN object and its child object links.
+message ObjectRef {
+  CID cid = 1;
+  string object_type = 2;
+  repeated CID children = 3;
+}
+
+// TimeRangeUnixMs records a protocol event or artifact time range.
+message TimeRangeUnixMs {
+  int64 started_at_unix_ms = 1;
+  int64 finished_at_unix_ms = 2;
+}
+
+// MoneyAmount stores currency amounts in minor units.
+message MoneyAmount {
+  string currency = 1;
+  // Cents, micros, or another currency-specific minor unit.
+  int64 amount_minor = 2;
+}
+
+// StringList wraps repeated strings for map values and other repeated-field use.
+message StringList {
+  repeated string values = 1;
+}
+
+// HashCodec identifies the hash algorithm used for a digest.
+enum HashCodec {
+  HASH_CODEC_UNSPECIFIED = 0;
+  HASH_CODEC_SHA256 = 1;
+}
+
+// TrustTier describes the rollout-safe trust level associated with an actor or artifact.
+enum TrustTier {
+  TRUST_TIER_UNSPECIFIED = 0;
+  TRUST_TIER_STANDARD = 1;
+  TRUST_TIER_VERIFIED = 2;
+  TRUST_TIER_TRUSTED = 3;
+  TRUST_TIER_PREMIUM_ATTESTED = 4;
+}
+
+// ExecutionMode describes the protocol operating mode.
+enum ExecutionMode {
+  EXECUTION_MODE_UNSPECIFIED = 0;
+  EXECUTION_MODE_DEMO = 1;
+  EXECUTION_MODE_SHADOW = 2;
+  EXECUTION_MODE_PRODUCTION = 3;
+}
+
+// AuditDecision records an audit result without embedding sensitive evidence.
+enum AuditDecision {
+  AUDIT_DECISION_UNSPECIFIED = 0;
+  AUDIT_DECISION_PENDING = 1;
+  AUDIT_DECISION_PASS = 2;
+  AUDIT_DECISION_FAIL = 3;
+  AUDIT_DECISION_AMBIGUOUS = 4;
+  AUDIT_DECISION_CHALLENGED = 5;
+}
+
+// ReceiptStatus records the verification lifecycle state for a receipt.
+enum ReceiptStatus {
+  RECEIPT_STATUS_UNSPECIFIED = 0;
+  RECEIPT_STATUS_PENDING = 1;
+  RECEIPT_STATUS_VERIFIED = 2;
+  RECEIPT_STATUS_CHALLENGED = 3;
+  RECEIPT_STATUS_FAILED = 4;
+  RECEIPT_STATUS_EXPIRED = 5;
+}
