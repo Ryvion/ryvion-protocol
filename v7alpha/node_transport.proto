@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package ryvion.v7alpha;
+
+option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+
+import "google/protobuf/struct.proto";
+
+// node_transport.proto defines the internal V7 hub <-> node-agent gRPC
+// transport. It is additive to the public HTTP/OpenAI-compatible APIs.
+//
+// The transport carries signed node control-plane messages and safe V7
+// observability payloads. It must not embed raw prompts, raw transcript text,
+// private keys, admin keys, bind tokens, or raw tensor/vector data.
+
+// V7NodeTransportService is the production internal node transport. Browser,
+// marketplace, and OpenAI-compatible routes remain HTTP.
+service V7NodeTransportService {
+  rpc RegisterNode(RegisterNodeRequest) returns (RegisterNodeResponse);
+  rpc SendHeartbeat(SendHeartbeatRequest) returns (SendHeartbeatResponse);
+  rpc LeaseWork(LeaseWorkRequest) returns (LeaseWorkResponse);
+  rpc SubmitReceipt(SubmitReceiptRequest) returns (SubmitReceiptResponse);
+  rpc SubmitDashboardInferenceProgress(SubmitDashboardInferenceProgressRequest) returns (SubmitDashboardInferenceProgressResponse);
+}
+
+// RegisterNodeRequest mirrors the existing signed node registration envelope.
+message RegisterNodeRequest {
+  string public_key_hex = 1;
+  string device_type = 2;
+  string declared_country = 3;
+  string gpu_model = 4;
+  uint32 cpu_cores = 5;
+  uint64 ram_bytes = 6;
+  uint64 vram_bytes = 7;
+  string sensors = 8;
+  uint64 bandwidth_mbps = 9;
+  uint64 geohash_bucket = 10;
+  uint32 attestation_method = 11;
+  string referral_code = 12;
+  bool tee_supported = 13;
+  string tee_type = 14;
+  bytes signature = 15;
+}
+
+message RegisterNodeResponse {
+  bool ok = 1;
+  string node_id = 2;
+  string latest_version = 3;
+}
+
+// SendHeartbeatRequest mirrors the existing signed heartbeat plus an optional
+// JSON-compatible V7 capability payload. The V7 payload is encoded as Struct
+// so rollout-critical heartbeat parsing stays fail-open and schema tolerant.
+message SendHeartbeatRequest {
+  string public_key_hex = 1;
+  int64 timestamp_ms = 2;
+  double cpu_util = 3;
+  double mem_util = 4;
+  double gpu_util = 5;
+  double power_watts = 6;
+  bool gpu_throttled = 7;
+  string system_timezone = 8;
+  google.protobuf.Struct v7 = 9;
+  bytes signature = 10;
+}
+
+message SendHeartbeatResponse {
+  bool ok = 1;
+  string node_id = 2;
+  uint32 next_heartbeat_interval = 3;
+  string country_code = 4;
+  bool location_approved = 5;
+  bool sovereign_verified = 6;
+  string verification_source = 7;
+  string trust_reason = 8;
+  bool v7_snapshot_upserted = 9;
+  uint32 snapshot_model_count = 10;
+  uint32 snapshot_backend_count = 11;
+  bool has_capability_profile = 12;
+  string hub_instance_id = 13;
+  repeated string ignored_optional_fields = 14;
+  string latest_version = 15;
+}
+
+// LeaseWorkRequest replaces node-agent long-poll HTTP work requests with a
+// signed unary gRPC lease request. Callers set long_poll=true and a client-side
+// deadline when they want hub-orch to wait for optional V7 work.
+message LeaseWorkRequest {
+  string public_key_hex = 1;
+  int64 timestamp_ms = 2;
+  bool long_poll = 3;
+  bytes signature = 4;
+}
+
+message V7RuntimeRequirements {
+  bool needs_gpu = 1;
+  bool needs_managed_oci = 2;
+  bool needs_managed_oci_gpu = 3;
+  bool needs_ryvion_runtime = 4;
+  bool needs_native_streaming = 5;
+  bool needs_native_report = 6;
+  bool needs_agent_hosting = 7;
+  repeated string tooling = 8;
+  uint64 min_disk_gb = 9;
+  uint32 min_vram_mb = 10;
+  string jurisdiction = 11;
+  string trust_level = 12;
+}
+
+message V7WorkAssignment {
+  string job_id = 1;
+  string kind = 2;
+  string payload_url = 3;
+  uint64 price_per_unit = 4;
+  uint32 units = 5;
+  string image = 6;
+  string spec_json = 7;
+  string job_pubkey = 8;
+  string executor_kind = 9;
+  string assurance_class = 10;
+  V7RuntimeRequirements runtime_requirements = 11;
+}
+
+message LeaseWorkResponse {
+  bool has_work = 1;
+  V7WorkAssignment assignment = 2;
+  string reason = 3;
+  uint32 retry_in_seconds = 4;
+  string message = 5;
+}
+
+message SubmitReceiptRequest {
+  string job_id = 1;
+  string public_key_hex = 2;
+  string result_hash_hex = 3;
+  uint64 metering_units = 4;
+  bytes signature = 5;
+  google.protobuf.Struct metadata = 6;
+}
+
+message SubmitReceiptResponse {
+  bool accepted = 1;
+  string status = 2;
+  string receipt_id = 3;
+  string reason = 4;
+  google.protobuf.Struct metadata = 5;
+}
+
+message V7DashboardInferenceProgressChunk {
+  int64 seq = 1;
+  int64 stable_seq = 2;
+  string type = 3;
+  string kind = 4;
+  string chunk_kind = 5;
+  string text = 6;
+  string text_delta = 7;
+  string finish_reason = 8;
+  string branch_id = 9;
+  int64 epoch = 10;
+  int64 from_seq = 11;
+  int64 to_seq = 12;
+  int64 replacement_epoch = 13;
+  string new_branch_id = 14;
+  string rollback_reason = 15;
+}
+
+message SubmitDashboardInferenceProgressRequest {
+  string run_id = 1;
+  string job_id = 2;
+  string node_id = 3;
+  string public_key_hex = 4;
+  int64 seq_start = 5;
+  repeated V7DashboardInferenceProgressChunk chunks = 6;
+}
+
+message SubmitDashboardInferenceProgressResponse {
+  bool accepted = 1;
+  string run_id = 2;
+  string job_id = 3;
+  uint32 chunks_accepted = 4;
+  int64 next_seq = 5;
+}
