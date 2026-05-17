@@ -5,6 +5,7 @@ package ryvion.node.v1;
 option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/node/v1;nodev1";
 
 import "google/protobuf/struct.proto";
+import "ryvion/speculative/v1/draft_packet.proto";
 
 // NodeGateway is the canonical outbound node-to-hub control stream.
 // Public buyer APIs remain HTTP/OpenAI-compatible; this service is internal.
@@ -171,7 +172,7 @@ message Ping {
 message DraftPacketBatch {
   string run_id = 1;
   string window_id = 2;
-  repeated google.protobuf.Struct packets = 3;
+  repeated ryvion.speculative.v1.DraftPacket packets = 3;
 }
 
 message DraftPacketDecision {

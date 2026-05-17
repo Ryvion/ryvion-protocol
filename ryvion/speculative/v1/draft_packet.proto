@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package ryvion.speculative.v1;
+
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/speculative/v1;speculativev1";
+
+message DraftPacket {
+  string packet_id = 1;
+  string window_id = 2;
+  string workgraph_id = 3;
+  string role_id = 4;
+  string node_id = 5;
+  string parent_prefix_hash = 6;
+  repeated int32 candidate_tokens = 7;
+  string model_hash = 8;
+  string drafter_model_id = 9;
+  uint32 horizon = 10;
+  int64 confidence_bps = 11;
+  int64 deadline_ms = 12;
+  int64 energy_mwh = 13;
+  string signature = 14;
+  bool production_valid = 15;
+  bool test_adapter = 16;
+  string billing_status = 17;
+}

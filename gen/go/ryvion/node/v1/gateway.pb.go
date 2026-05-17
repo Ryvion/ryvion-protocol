@@ -7,6 +7,7 @@
 package nodev1
 
 import (
+	v1 "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/speculative/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -1554,7 +1555,7 @@ type DraftPacketBatch struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RunId         string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
 	WindowId      string                 `protobuf:"bytes,2,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
-	Packets       []*structpb.Struct     `protobuf:"bytes,3,rep,name=packets,proto3" json:"packets,omitempty"`
+	Packets       []*v1.DraftPacket      `protobuf:"bytes,3,rep,name=packets,proto3" json:"packets,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1603,7 +1604,7 @@ func (x *DraftPacketBatch) GetWindowId() string {
 	return ""
 }
 
-func (x *DraftPacketBatch) GetPackets() []*structpb.Struct {
+func (x *DraftPacketBatch) GetPackets() []*v1.DraftPacket {
 	if x != nil {
 		return x.Packets
 	}
@@ -1994,7 +1995,7 @@ var File_ryvion_node_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\n" +
-	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xce\x04\n" +
+	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a(ryvion/speculative/v1/draft_packet.proto\"\xce\x04\n" +
 	"\tNodeToHub\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12\x1d\n" +
 	"\n" +
@@ -2136,11 +2137,11 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"model_path\x18\x02 \x01(\tR\tmodelPath\x12>\n" +
 	"\x0eruntime_tuning\x18\x03 \x01(\v2\x17.google.protobuf.StructR\rruntimeTuning\"\x1c\n" +
 	"\x04Ping\x12\x14\n" +
-	"\x05nonce\x18\x01 \x01(\tR\x05nonce\"y\n" +
+	"\x05nonce\x18\x01 \x01(\tR\x05nonce\"\x84\x01\n" +
 	"\x10DraftPacketBatch\x12\x15\n" +
 	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1b\n" +
-	"\twindow_id\x18\x02 \x01(\tR\bwindowId\x121\n" +
-	"\apackets\x18\x03 \x03(\v2\x17.google.protobuf.StructR\apackets\"f\n" +
+	"\twindow_id\x18\x02 \x01(\tR\bwindowId\x12<\n" +
+	"\apackets\x18\x03 \x03(\v2\".ryvion.speculative.v1.DraftPacketR\apackets\"f\n" +
 	"\x13DraftPacketDecision\x12\x1b\n" +
 	"\tpacket_id\x18\x01 \x01(\tR\bpacketId\x12\x1a\n" +
 	"\baccepted\x18\x02 \x01(\bR\baccepted\x12\x16\n" +
@@ -2212,6 +2213,7 @@ var file_ryvion_node_v1_gateway_proto_goTypes = []any{
 	(*WorkReceipt)(nil),         // 19: ryvion.node.v1.WorkReceipt
 	(*WorkReceiptAck)(nil),      // 20: ryvion.node.v1.WorkReceiptAck
 	(*structpb.Struct)(nil),     // 21: google.protobuf.Struct
+	(*v1.DraftPacket)(nil),      // 22: ryvion.speculative.v1.DraftPacket
 }
 var file_ryvion_node_v1_gateway_proto_depIdxs = []int32{
 	3,  // 0: ryvion.node.v1.NodeToHub.hello:type_name -> ryvion.node.v1.NodeHello
@@ -2238,7 +2240,7 @@ var file_ryvion_node_v1_gateway_proto_depIdxs = []int32{
 	21, // 21: ryvion.node.v1.DraftCommand.policy:type_name -> google.protobuf.Struct
 	21, // 22: ryvion.node.v1.VerifierCommand.payload:type_name -> google.protobuf.Struct
 	21, // 23: ryvion.node.v1.RuntimeWarmCommand.runtime_tuning:type_name -> google.protobuf.Struct
-	21, // 24: ryvion.node.v1.DraftPacketBatch.packets:type_name -> google.protobuf.Struct
+	22, // 24: ryvion.node.v1.DraftPacketBatch.packets:type_name -> ryvion.speculative.v1.DraftPacket
 	16, // 25: ryvion.node.v1.DraftPacketBatchAck.decisions:type_name -> ryvion.node.v1.DraftPacketDecision
 	21, // 26: ryvion.node.v1.VerifierResult.receipt:type_name -> google.protobuf.Struct
 	21, // 27: ryvion.node.v1.WorkReceipt.metadata:type_name -> google.protobuf.Struct
