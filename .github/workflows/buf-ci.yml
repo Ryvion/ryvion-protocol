@@ -16,5 +16,4 @@ jobs:
           github_token: ${{ github.token }}
       - uses: bufbuild/buf-lint-action@v1
         with:
-          input: "proto"
-
+          input: "."
