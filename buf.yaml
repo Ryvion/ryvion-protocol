@@ -11,7 +11,10 @@ lint:
       - v7alpha
     SERVICE_SUFFIX:
       - unified_node_protocol.proto
+      - ryvion/node/v1/gateway.proto
     RPC_REQUEST_STANDARD_NAME:
       - unified_node_protocol.proto
+      - ryvion/node/v1/gateway.proto
     RPC_RESPONSE_STANDARD_NAME:
       - unified_node_protocol.proto
+      - ryvion/node/v1/gateway.proto

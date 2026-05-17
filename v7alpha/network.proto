@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package ryvion.v7alpha;
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
-// network.proto defines additive V7 alpha contracts for measured node-agent
-// network reports and future hub-orch PathOracle scoring. These messages are
+// network.proto defines additive V7 alpha contracts for measured ryvion-node
+// network reports and future ryvion-hub PathOracle scoring. These messages are
 // measurements and scoring inputs, not networking implementation or scheduling
 // decisions.
 //
@@ -53,7 +53,7 @@ message NetworkProfile {
   int64 measured_at_unix_ms = 11;
 }
 
-// PathProbeReport is emitted by node-agent for a target or region identifier.
+// PathProbeReport is emitted by ryvion-node for a target or region identifier.
 // It records measurements only and must not encode placement decisions.
 message PathProbeReport {
   string node_id = 1;

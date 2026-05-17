@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ryvion.v7alpha;
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
 // common.proto carries protocol identity primitives only.
 //

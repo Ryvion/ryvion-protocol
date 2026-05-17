@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package ryvion.v7alpha;
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
 import "google/protobuf/struct.proto";
 
-// node_transport.proto defines the internal V7 hub <-> node-agent gRPC
+// node_transport.proto defines the internal V7 hub <-> ryvion-node gRPC
 // transport. It is additive to the public HTTP/OpenAI-compatible APIs.
 //
 // The transport carries signed node control-plane messages and safe V7
@@ -82,9 +82,9 @@ message SendHeartbeatResponse {
   string latest_version = 15;
 }
 
-// LeaseWorkRequest replaces node-agent long-poll HTTP work requests with a
+// LeaseWorkRequest replaces ryvion-node long-poll HTTP work requests with a
 // signed unary gRPC lease request. Callers set long_poll=true and a client-side
-// deadline when they want hub-orch to wait for optional V7 work.
+// deadline when they want ryvion-hub to wait for optional V7 work.
 message LeaseWorkRequest {
   string public_key_hex = 1;
   int64 timestamp_ms = 2;

@@ -8,8 +8,8 @@ Ryvion is a verified execution fabric and compute object web, not just a GPU mar
 
 This repository defines cross-service protocol contracts between:
 
-- `hub-orch`
-- `node-agent`
+- `ryvion-hub`
+- `ryvion-node`
 - web/SDKs
 - future POP/relay/cache services
 
@@ -43,7 +43,7 @@ The existing v1 protocol must not be broken. Do not remove or rename existing fi
 
 ## Ownership Boundaries
 
-`hub-orch` owns:
+`ryvion-hub` owns:
 
 - RCOG
 - RYV3GraphReceipt
@@ -54,7 +54,7 @@ The existing v1 protocol must not be broken. Do not remove or rename existing fi
 - ObjectCDN/FEC planning
 - audit/settlement
 
-`node-agent` owns:
+`ryvion-node` owns:
 
 - capability passport
 - network profile
@@ -65,4 +65,4 @@ The existing v1 protocol must not be broken. Do not remove or rename existing fi
 - evidence payload
 - proofrunner bridge
 
-Proto messages define the contract between these owners. They should not encode hub-orch or node-agent implementation details beyond the data required for stable interoperability.
+Proto messages define the contract between these owners. They should not encode `ryvion-hub` or `ryvion-node` implementation details beyond the data required for stable interoperability.

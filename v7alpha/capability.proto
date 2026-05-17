@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package ryvion.v7alpha;
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
-// CapabilityPassport reports factual node-agent capabilities for future hub-orch
+// CapabilityPassport reports factual ryvion-node capabilities for future ryvion-hub
 // placement and risk decisions. It must not contain secrets, admin keys, bind
 // tokens, or scheduling decisions.
 message CapabilityPassport {
@@ -25,7 +25,7 @@ message CapabilityPassport {
   int64 created_at_unix_ms = 15;
 }
 
-// HardwareProfile describes local compute hardware claims measured by node-agent.
+// HardwareProfile describes local compute hardware claims measured by ryvion-node.
 message HardwareProfile {
   uint32 cpu_cores = 1;
   uint64 ram_bytes = 2;

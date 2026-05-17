@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package ryvion.v7alpha;
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
 import "v7alpha/common.proto";
 
-// evidence.proto defines additive V7 alpha contracts for node-agent
+// evidence.proto defines additive V7 alpha contracts for ryvion-node
 // proof-carrying evidence. Evidence is not the final RYV3 receipt.
 //
 // Node-agent provides these payloads after execution. Hub-orch validates them
@@ -17,7 +17,7 @@ import "v7alpha/common.proto";
 // not contain raw prompt text, raw transcript text, raw output bytes, secrets,
 // or private keys.
 
-// RYV3EvidencePayload is the node-agent evidence payload that hub-orch can
+// RYV3EvidencePayload is the ryvion-node evidence payload that ryvion-hub can
 // validate and bind into a final RYV3GraphReceipt.
 message RYV3EvidencePayload {
   string schema_version = 1;
@@ -69,7 +69,7 @@ message ArtifactEvidence {
 }
 
 // ProofCarryingRunnerOutput packages the primary runner artifact with the
-// node-agent evidence payload. Hub-orch still produces the final RYV3 receipt
+// ryvion-node evidence payload. Hub-orch still produces the final RYV3 receipt
 // after validation.
 message ProofCarryingRunnerOutput {
   ArtifactEvidence primary_artifact = 1;

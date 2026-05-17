@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ryvion.v7alpha;
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
 import "v7alpha/capability.proto";
 import "v7alpha/network.proto";
@@ -12,7 +12,7 @@ import "v7alpha/objectcdn.proto";
 // heartbeat.proto defines additive V7 alpha heartbeat extension payloads.
 //
 // These messages are optional during rollout. Node-agent may omit any field
-// until it supports the corresponding V7 feature, and older hub-orch versions
+// until it supports the corresponding V7 feature, and older ryvion-hub versions
 // may ignore V7 heartbeat payloads entirely.
 //
 // Heartbeat payloads must not include secrets, demo keys, admin keys, bind
@@ -57,7 +57,7 @@ message SandboxPolicySummary {
 
 // V7HeartbeatPayload wraps optional V7 heartbeat extension data.
 //
-// All fields are optional for gradual rollout. Older hub-orch versions may
+// All fields are optional for gradual rollout. Older ryvion-hub versions may
 // ignore this wrapper while continuing to process the existing v1 Heartbeat.
 // No secret fields are allowed in this message.
 message V7HeartbeatPayload {

@@ -4,11 +4,11 @@ package ryvion.v7alpha;
 
 import "v7alpha/common.proto";
 
-option go_package = "github.com/Ryvion/proto/v7alpha;v7alphapb";
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/v7alpha;v7alphapb";
 
 // model_lease.proto defines additive V7 alpha contracts for model residency,
-// lease state, and readiness challenges. Model leases help hub-orch and
-// node-agent avoid VRAM thrashing by making residency explicit.
+// lease state, and readiness challenges. Model leases help ryvion-hub and
+// ryvion-node avoid VRAM thrashing by making residency explicit.
 //
 // Readiness challenges are residency and warmth signals before hot assignment.
 // They do not prove full model correctness. Sparse checks are placeholders for
@@ -71,7 +71,7 @@ enum ReadinessDecision {
   READINESS_DECISION_TOO_SLOW = 5;
 }
 
-// ReadinessChallenge asks node-agent to prove model residency and warmth
+// ReadinessChallenge asks ryvion-node to prove model residency and warmth
 // without embedding raw prompt text.
 message ReadinessChallenge {
   string challenge_id = 1;
@@ -86,7 +86,7 @@ message ReadinessChallenge {
   string nonce = 10;
 }
 
-// ReadinessResponse records the node-agent response to a residency and warmth
+// ReadinessResponse records the ryvion-node response to a residency and warmth
 // challenge.
 message ReadinessResponse {
   string challenge_id = 1;
