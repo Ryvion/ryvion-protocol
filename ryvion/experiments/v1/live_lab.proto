@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package ryvion.experiments.v1;
+
+option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/experiments/v1;experimentsv1";
+
+import "google/protobuf/struct.proto";
+import "ryvion/node/v1/gateway.proto";
+
+// ExperimentalLiveLabGateway is an explicit admin/experiment transport.
+// It is intentionally outside canonical NodeGateway so Live Lab contracts do
+// not become production node-control payloads.
+service ExperimentalLiveLabGateway {
+  rpc Connect(stream LiveLabNodeToHub) returns (stream LiveLabHubToNode);
+}
+
+message LiveLabNodeToHub {
+  string node_id = 1;
+  string message_id = 2;
+  int64 created_at_unix_ms = 3;
+
+  oneof payload {
+    LiveLabCommandRequest command_request = 10;
+    LiveLabVerifierResult verifier_result = 11;
+  }
+
+  ryvion.node.v1.Signature signature = 100;
+}
+
+message LiveLabHubToNode {
+  string message_id = 1;
+  int64 created_at_unix_ms = 2;
+
+  oneof payload {
+    LiveLabCommand command = 10;
+    LiveLabVerifierResultAck verifier_result_ack = 11;
+  }
+}
+
+message LiveLabCommandRequest {
+  string run_id = 1;
+  string job_id = 2;
+  string role = 3;
+}
+
+message LiveLabCommand {
+  string schema_version = 1;
+  string run_id = 2;
+  string job_id = 3;
+  string role = 4;
+  string command = 5;
+  string command_id = 6;
+  string reason = 7;
+  google.protobuf.Struct payload = 8;
+}
+
+message LiveLabVerifierResult {
+  string run_id = 1;
+  string job_id = 2;
+  string window_id = 3;
+  uint32 wave_index = 4;
+  uint32 accepted_len = 5;
+  string tree_cid = 6;
+  int64 duration_ms = 7;
+  string accepted_text_hash = 8;
+  bool accepted_text_public = 9;
+  bool eos = 10;
+  string stop_reason = 11;
+  google.protobuf.Struct probe_summary = 12;
+}
+
+message LiveLabVerifierResultAck {
+  string schema_version = 1;
+  string status = 2;
+  string run_id = 3;
+  string window_id = 4;
+  string reason = 5;
+  google.protobuf.Struct metadata = 6;
+}

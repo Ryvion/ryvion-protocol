@@ -12,9 +12,12 @@ lint:
     SERVICE_SUFFIX:
       - unified_node_protocol.proto
       - ryvion/node/v1/gateway.proto
+      - ryvion/experiments/v1/live_lab.proto
     RPC_REQUEST_STANDARD_NAME:
       - unified_node_protocol.proto
       - ryvion/node/v1/gateway.proto
+      - ryvion/experiments/v1/live_lab.proto
     RPC_RESPONSE_STANDARD_NAME:
       - unified_node_protocol.proto
       - ryvion/node/v1/gateway.proto
+      - ryvion/experiments/v1/live_lab.proto
