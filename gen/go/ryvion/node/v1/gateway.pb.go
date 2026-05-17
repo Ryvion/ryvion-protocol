@@ -35,6 +35,8 @@ type NodeToHub struct {
 	//	*NodeToHub_VerifierResult
 	//	*NodeToHub_Receipt
 	//	*NodeToHub_WorkLeaseRequest
+	//	*NodeToHub_LiveLabCommandRequest
+	//	*NodeToHub_LiveLabVerifierResult
 	Payload       isNodeToHub_Payload `protobuf_oneof:"payload"`
 	Signature     *Signature          `protobuf:"bytes,100,opt,name=signature,proto3" json:"signature,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -153,6 +155,24 @@ func (x *NodeToHub) GetWorkLeaseRequest() *WorkLeaseRequest {
 	return nil
 }
 
+func (x *NodeToHub) GetLiveLabCommandRequest() *LiveLabCommandRequest {
+	if x != nil {
+		if x, ok := x.Payload.(*NodeToHub_LiveLabCommandRequest); ok {
+			return x.LiveLabCommandRequest
+		}
+	}
+	return nil
+}
+
+func (x *NodeToHub) GetLiveLabVerifierResult() *LiveLabVerifierResult {
+	if x != nil {
+		if x, ok := x.Payload.(*NodeToHub_LiveLabVerifierResult); ok {
+			return x.LiveLabVerifierResult
+		}
+	}
+	return nil
+}
+
 func (x *NodeToHub) GetSignature() *Signature {
 	if x != nil {
 		return x.Signature
@@ -188,6 +208,14 @@ type NodeToHub_WorkLeaseRequest struct {
 	WorkLeaseRequest *WorkLeaseRequest `protobuf:"bytes,15,opt,name=work_lease_request,json=workLeaseRequest,proto3,oneof"`
 }
 
+type NodeToHub_LiveLabCommandRequest struct {
+	LiveLabCommandRequest *LiveLabCommandRequest `protobuf:"bytes,16,opt,name=live_lab_command_request,json=liveLabCommandRequest,proto3,oneof"`
+}
+
+type NodeToHub_LiveLabVerifierResult struct {
+	LiveLabVerifierResult *LiveLabVerifierResult `protobuf:"bytes,17,opt,name=live_lab_verifier_result,json=liveLabVerifierResult,proto3,oneof"`
+}
+
 func (*NodeToHub_Hello) isNodeToHub_Payload() {}
 
 func (*NodeToHub_Heartbeat) isNodeToHub_Payload() {}
@@ -199,6 +227,10 @@ func (*NodeToHub_VerifierResult) isNodeToHub_Payload() {}
 func (*NodeToHub_Receipt) isNodeToHub_Payload() {}
 
 func (*NodeToHub_WorkLeaseRequest) isNodeToHub_Payload() {}
+
+func (*NodeToHub_LiveLabCommandRequest) isNodeToHub_Payload() {}
+
+func (*NodeToHub_LiveLabVerifierResult) isNodeToHub_Payload() {}
 
 type HubToNode struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
@@ -216,6 +248,8 @@ type HubToNode struct {
 	//	*HubToNode_WorkLeaseAck
 	//	*HubToNode_ReceiptAck
 	//	*HubToNode_DraftPacketBatchAck
+	//	*HubToNode_LiveLabCommand
+	//	*HubToNode_LiveLabVerifierResultAck
 	Payload       isHubToNode_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -362,6 +396,24 @@ func (x *HubToNode) GetDraftPacketBatchAck() *DraftPacketBatchAck {
 	return nil
 }
 
+func (x *HubToNode) GetLiveLabCommand() *LiveLabCommand {
+	if x != nil {
+		if x, ok := x.Payload.(*HubToNode_LiveLabCommand); ok {
+			return x.LiveLabCommand
+		}
+	}
+	return nil
+}
+
+func (x *HubToNode) GetLiveLabVerifierResultAck() *LiveLabVerifierResultAck {
+	if x != nil {
+		if x, ok := x.Payload.(*HubToNode_LiveLabVerifierResultAck); ok {
+			return x.LiveLabVerifierResultAck
+		}
+	}
+	return nil
+}
+
 type isHubToNode_Payload interface {
 	isHubToNode_Payload()
 }
@@ -406,6 +458,14 @@ type HubToNode_DraftPacketBatchAck struct {
 	DraftPacketBatchAck *DraftPacketBatchAck `protobuf:"bytes,19,opt,name=draft_packet_batch_ack,json=draftPacketBatchAck,proto3,oneof"`
 }
 
+type HubToNode_LiveLabCommand struct {
+	LiveLabCommand *LiveLabCommand `protobuf:"bytes,20,opt,name=live_lab_command,json=liveLabCommand,proto3,oneof"`
+}
+
+type HubToNode_LiveLabVerifierResultAck struct {
+	LiveLabVerifierResultAck *LiveLabVerifierResultAck `protobuf:"bytes,21,opt,name=live_lab_verifier_result_ack,json=liveLabVerifierResultAck,proto3,oneof"`
+}
+
 func (*HubToNode_Assignment) isHubToNode_Payload() {}
 
 func (*HubToNode_Abort) isHubToNode_Payload() {}
@@ -425,6 +485,10 @@ func (*HubToNode_WorkLeaseAck) isHubToNode_Payload() {}
 func (*HubToNode_ReceiptAck) isHubToNode_Payload() {}
 
 func (*HubToNode_DraftPacketBatchAck) isHubToNode_Payload() {}
+
+func (*HubToNode_LiveLabCommand) isHubToNode_Payload() {}
+
+func (*HubToNode_LiveLabVerifierResultAck) isHubToNode_Payload() {}
 
 type Signature struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1754,6 +1818,382 @@ func (x *DraftPacketBatchAck) GetDecisions() []*DraftPacketDecision {
 	return nil
 }
 
+type LiveLabCommandRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RunId         string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	JobId         string                 `protobuf:"bytes,2,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	Role          string                 `protobuf:"bytes,3,opt,name=role,proto3" json:"role,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LiveLabCommandRequest) Reset() {
+	*x = LiveLabCommandRequest{}
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LiveLabCommandRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LiveLabCommandRequest) ProtoMessage() {}
+
+func (x *LiveLabCommandRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LiveLabCommandRequest.ProtoReflect.Descriptor instead.
+func (*LiveLabCommandRequest) Descriptor() ([]byte, []int) {
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *LiveLabCommandRequest) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *LiveLabCommandRequest) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
+}
+
+func (x *LiveLabCommandRequest) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+type LiveLabCommand struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SchemaVersion string                 `protobuf:"bytes,1,opt,name=schema_version,json=schemaVersion,proto3" json:"schema_version,omitempty"`
+	RunId         string                 `protobuf:"bytes,2,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	JobId         string                 `protobuf:"bytes,3,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	Role          string                 `protobuf:"bytes,4,opt,name=role,proto3" json:"role,omitempty"`
+	Command       string                 `protobuf:"bytes,5,opt,name=command,proto3" json:"command,omitempty"`
+	CommandId     string                 `protobuf:"bytes,6,opt,name=command_id,json=commandId,proto3" json:"command_id,omitempty"`
+	Reason        string                 `protobuf:"bytes,7,opt,name=reason,proto3" json:"reason,omitempty"`
+	Payload       *structpb.Struct       `protobuf:"bytes,8,opt,name=payload,proto3" json:"payload,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LiveLabCommand) Reset() {
+	*x = LiveLabCommand{}
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LiveLabCommand) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LiveLabCommand) ProtoMessage() {}
+
+func (x *LiveLabCommand) ProtoReflect() protoreflect.Message {
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LiveLabCommand.ProtoReflect.Descriptor instead.
+func (*LiveLabCommand) Descriptor() ([]byte, []int) {
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *LiveLabCommand) GetSchemaVersion() string {
+	if x != nil {
+		return x.SchemaVersion
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetCommand() string {
+	if x != nil {
+		return x.Command
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetCommandId() string {
+	if x != nil {
+		return x.CommandId
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *LiveLabCommand) GetPayload() *structpb.Struct {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+type LiveLabVerifierResult struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	RunId              string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	JobId              string                 `protobuf:"bytes,2,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	WindowId           string                 `protobuf:"bytes,3,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
+	WaveIndex          uint32                 `protobuf:"varint,4,opt,name=wave_index,json=waveIndex,proto3" json:"wave_index,omitempty"`
+	AcceptedLen        uint32                 `protobuf:"varint,5,opt,name=accepted_len,json=acceptedLen,proto3" json:"accepted_len,omitempty"`
+	TreeCid            string                 `protobuf:"bytes,6,opt,name=tree_cid,json=treeCid,proto3" json:"tree_cid,omitempty"`
+	DurationMs         int64                  `protobuf:"varint,7,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
+	AcceptedTextHash   string                 `protobuf:"bytes,8,opt,name=accepted_text_hash,json=acceptedTextHash,proto3" json:"accepted_text_hash,omitempty"`
+	AcceptedTextPublic bool                   `protobuf:"varint,9,opt,name=accepted_text_public,json=acceptedTextPublic,proto3" json:"accepted_text_public,omitempty"`
+	Eos                bool                   `protobuf:"varint,10,opt,name=eos,proto3" json:"eos,omitempty"`
+	StopReason         string                 `protobuf:"bytes,11,opt,name=stop_reason,json=stopReason,proto3" json:"stop_reason,omitempty"`
+	ProbeSummary       *structpb.Struct       `protobuf:"bytes,12,opt,name=probe_summary,json=probeSummary,proto3" json:"probe_summary,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *LiveLabVerifierResult) Reset() {
+	*x = LiveLabVerifierResult{}
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LiveLabVerifierResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LiveLabVerifierResult) ProtoMessage() {}
+
+func (x *LiveLabVerifierResult) ProtoReflect() protoreflect.Message {
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LiveLabVerifierResult.ProtoReflect.Descriptor instead.
+func (*LiveLabVerifierResult) Descriptor() ([]byte, []int) {
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *LiveLabVerifierResult) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResult) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResult) GetWindowId() string {
+	if x != nil {
+		return x.WindowId
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResult) GetWaveIndex() uint32 {
+	if x != nil {
+		return x.WaveIndex
+	}
+	return 0
+}
+
+func (x *LiveLabVerifierResult) GetAcceptedLen() uint32 {
+	if x != nil {
+		return x.AcceptedLen
+	}
+	return 0
+}
+
+func (x *LiveLabVerifierResult) GetTreeCid() string {
+	if x != nil {
+		return x.TreeCid
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResult) GetDurationMs() int64 {
+	if x != nil {
+		return x.DurationMs
+	}
+	return 0
+}
+
+func (x *LiveLabVerifierResult) GetAcceptedTextHash() string {
+	if x != nil {
+		return x.AcceptedTextHash
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResult) GetAcceptedTextPublic() bool {
+	if x != nil {
+		return x.AcceptedTextPublic
+	}
+	return false
+}
+
+func (x *LiveLabVerifierResult) GetEos() bool {
+	if x != nil {
+		return x.Eos
+	}
+	return false
+}
+
+func (x *LiveLabVerifierResult) GetStopReason() string {
+	if x != nil {
+		return x.StopReason
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResult) GetProbeSummary() *structpb.Struct {
+	if x != nil {
+		return x.ProbeSummary
+	}
+	return nil
+}
+
+type LiveLabVerifierResultAck struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SchemaVersion string                 `protobuf:"bytes,1,opt,name=schema_version,json=schemaVersion,proto3" json:"schema_version,omitempty"`
+	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	RunId         string                 `protobuf:"bytes,3,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	WindowId      string                 `protobuf:"bytes,4,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
+	Reason        string                 `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,6,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LiveLabVerifierResultAck) Reset() {
+	*x = LiveLabVerifierResultAck{}
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LiveLabVerifierResultAck) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LiveLabVerifierResultAck) ProtoMessage() {}
+
+func (x *LiveLabVerifierResultAck) ProtoReflect() protoreflect.Message {
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LiveLabVerifierResultAck.ProtoReflect.Descriptor instead.
+func (*LiveLabVerifierResultAck) Descriptor() ([]byte, []int) {
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *LiveLabVerifierResultAck) GetSchemaVersion() string {
+	if x != nil {
+		return x.SchemaVersion
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResultAck) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResultAck) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResultAck) GetWindowId() string {
+	if x != nil {
+		return x.WindowId
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResultAck) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *LiveLabVerifierResultAck) GetMetadata() *structpb.Struct {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
 type VerifierResult struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	RunId             string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
@@ -1768,7 +2208,7 @@ type VerifierResult struct {
 
 func (x *VerifierResult) Reset() {
 	*x = VerifierResult{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[18]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1780,7 +2220,7 @@ func (x *VerifierResult) String() string {
 func (*VerifierResult) ProtoMessage() {}
 
 func (x *VerifierResult) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[18]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1793,7 +2233,7 @@ func (x *VerifierResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifierResult.ProtoReflect.Descriptor instead.
 func (*VerifierResult) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{18}
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *VerifierResult) GetRunId() string {
@@ -1851,7 +2291,7 @@ type WorkReceipt struct {
 
 func (x *WorkReceipt) Reset() {
 	*x = WorkReceipt{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[19]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1863,7 +2303,7 @@ func (x *WorkReceipt) String() string {
 func (*WorkReceipt) ProtoMessage() {}
 
 func (x *WorkReceipt) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[19]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1876,7 +2316,7 @@ func (x *WorkReceipt) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkReceipt.ProtoReflect.Descriptor instead.
 func (*WorkReceipt) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{19}
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *WorkReceipt) GetJobId() string {
@@ -1927,7 +2367,7 @@ type WorkReceiptAck struct {
 
 func (x *WorkReceiptAck) Reset() {
 	*x = WorkReceiptAck{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[20]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1939,7 +2379,7 @@ func (x *WorkReceiptAck) String() string {
 func (*WorkReceiptAck) ProtoMessage() {}
 
 func (x *WorkReceiptAck) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[20]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1952,7 +2392,7 @@ func (x *WorkReceiptAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkReceiptAck.ProtoReflect.Descriptor instead.
 func (*WorkReceiptAck) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{20}
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *WorkReceiptAck) GetAccepted() bool {
@@ -1994,7 +2434,7 @@ var File_ryvion_node_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\n" +
-	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xce\x04\n" +
+	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\"\x92\x06\n" +
 	"\tNodeToHub\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12\x1d\n" +
 	"\n" +
@@ -2006,9 +2446,11 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x12draft_packet_batch\x18\f \x01(\v2 .ryvion.node.v1.DraftPacketBatchH\x00R\x10draftPacketBatch\x12I\n" +
 	"\x0fverifier_result\x18\r \x01(\v2\x1e.ryvion.node.v1.VerifierResultH\x00R\x0everifierResult\x127\n" +
 	"\areceipt\x18\x0e \x01(\v2\x1b.ryvion.node.v1.WorkReceiptH\x00R\areceipt\x12P\n" +
-	"\x12work_lease_request\x18\x0f \x01(\v2 .ryvion.node.v1.WorkLeaseRequestH\x00R\x10workLeaseRequest\x127\n" +
+	"\x12work_lease_request\x18\x0f \x01(\v2 .ryvion.node.v1.WorkLeaseRequestH\x00R\x10workLeaseRequest\x12`\n" +
+	"\x18live_lab_command_request\x18\x10 \x01(\v2%.ryvion.node.v1.LiveLabCommandRequestH\x00R\x15liveLabCommandRequest\x12`\n" +
+	"\x18live_lab_verifier_result\x18\x11 \x01(\v2%.ryvion.node.v1.LiveLabVerifierResultH\x00R\x15liveLabVerifierResult\x127\n" +
 	"\tsignature\x18d \x01(\v2\x19.ryvion.node.v1.SignatureR\tsignatureB\t\n" +
-	"\apayload\"\x90\x06\n" +
+	"\apayload\"\xc8\a\n" +
 	"\tHubToNode\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12+\n" +
@@ -2026,7 +2468,9 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x0ework_lease_ack\x18\x11 \x01(\v2\x1c.ryvion.node.v1.WorkLeaseAckH\x00R\fworkLeaseAck\x12A\n" +
 	"\vreceipt_ack\x18\x12 \x01(\v2\x1e.ryvion.node.v1.WorkReceiptAckH\x00R\n" +
 	"receiptAck\x12Z\n" +
-	"\x16draft_packet_batch_ack\x18\x13 \x01(\v2#.ryvion.node.v1.DraftPacketBatchAckH\x00R\x13draftPacketBatchAckB\t\n" +
+	"\x16draft_packet_batch_ack\x18\x13 \x01(\v2#.ryvion.node.v1.DraftPacketBatchAckH\x00R\x13draftPacketBatchAck\x12J\n" +
+	"\x10live_lab_command\x18\x14 \x01(\v2\x1e.ryvion.node.v1.LiveLabCommandH\x00R\x0eliveLabCommand\x12j\n" +
+	"\x1clive_lab_verifier_result_ack\x18\x15 \x01(\v2(.ryvion.node.v1.LiveLabVerifierResultAckH\x00R\x18liveLabVerifierResultAckB\t\n" +
 	"\apayload\"^\n" +
 	"\tSignature\x12\x15\n" +
 	"\x06key_id\x18\x01 \x01(\tR\x05keyId\x12\x1c\n" +
@@ -2151,7 +2595,45 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\tattempted\x18\x03 \x01(\rR\tattempted\x12\x1a\n" +
 	"\baccepted\x18\x04 \x01(\rR\baccepted\x12\x1a\n" +
 	"\brejected\x18\x05 \x01(\rR\brejected\x12A\n" +
-	"\tdecisions\x18\x06 \x03(\v2#.ryvion.node.v1.DraftPacketDecisionR\tdecisions\"\xe7\x01\n" +
+	"\tdecisions\x18\x06 \x03(\v2#.ryvion.node.v1.DraftPacketDecisionR\tdecisions\"Y\n" +
+	"\x15LiveLabCommandRequest\x12\x15\n" +
+	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x15\n" +
+	"\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x12\n" +
+	"\x04role\x18\x03 \x01(\tR\x04role\"\xfd\x01\n" +
+	"\x0eLiveLabCommand\x12%\n" +
+	"\x0eschema_version\x18\x01 \x01(\tR\rschemaVersion\x12\x15\n" +
+	"\x06run_id\x18\x02 \x01(\tR\x05runId\x12\x15\n" +
+	"\x06job_id\x18\x03 \x01(\tR\x05jobId\x12\x12\n" +
+	"\x04role\x18\x04 \x01(\tR\x04role\x12\x18\n" +
+	"\acommand\x18\x05 \x01(\tR\acommand\x12\x1d\n" +
+	"\n" +
+	"command_id\x18\x06 \x01(\tR\tcommandId\x12\x16\n" +
+	"\x06reason\x18\a \x01(\tR\x06reason\x121\n" +
+	"\apayload\x18\b \x01(\v2\x17.google.protobuf.StructR\apayload\"\xb1\x03\n" +
+	"\x15LiveLabVerifierResult\x12\x15\n" +
+	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x15\n" +
+	"\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x1b\n" +
+	"\twindow_id\x18\x03 \x01(\tR\bwindowId\x12\x1d\n" +
+	"\n" +
+	"wave_index\x18\x04 \x01(\rR\twaveIndex\x12!\n" +
+	"\faccepted_len\x18\x05 \x01(\rR\vacceptedLen\x12\x19\n" +
+	"\btree_cid\x18\x06 \x01(\tR\atreeCid\x12\x1f\n" +
+	"\vduration_ms\x18\a \x01(\x03R\n" +
+	"durationMs\x12,\n" +
+	"\x12accepted_text_hash\x18\b \x01(\tR\x10acceptedTextHash\x120\n" +
+	"\x14accepted_text_public\x18\t \x01(\bR\x12acceptedTextPublic\x12\x10\n" +
+	"\x03eos\x18\n" +
+	" \x01(\bR\x03eos\x12\x1f\n" +
+	"\vstop_reason\x18\v \x01(\tR\n" +
+	"stopReason\x12<\n" +
+	"\rprobe_summary\x18\f \x01(\v2\x17.google.protobuf.StructR\fprobeSummary\"\xda\x01\n" +
+	"\x18LiveLabVerifierResultAck\x12%\n" +
+	"\x0eschema_version\x18\x01 \x01(\tR\rschemaVersion\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12\x15\n" +
+	"\x06run_id\x18\x03 \x01(\tR\x05runId\x12\x1b\n" +
+	"\twindow_id\x18\x04 \x01(\tR\bwindowId\x12\x16\n" +
+	"\x06reason\x18\x05 \x01(\tR\x06reason\x123\n" +
+	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\xe7\x01\n" +
 	"\x0eVerifierResult\x12\x15\n" +
 	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1d\n" +
 	"\n" +
@@ -2188,68 +2670,79 @@ func file_ryvion_node_v1_gateway_proto_rawDescGZIP() []byte {
 	return file_ryvion_node_v1_gateway_proto_rawDescData
 }
 
-var file_ryvion_node_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_ryvion_node_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_ryvion_node_v1_gateway_proto_goTypes = []any{
-	(*NodeToHub)(nil),           // 0: ryvion.node.v1.NodeToHub
-	(*HubToNode)(nil),           // 1: ryvion.node.v1.HubToNode
-	(*Signature)(nil),           // 2: ryvion.node.v1.Signature
-	(*NodeHello)(nil),           // 3: ryvion.node.v1.NodeHello
-	(*NodeHeartbeat)(nil),       // 4: ryvion.node.v1.NodeHeartbeat
-	(*NodeHeartbeatAck)(nil),    // 5: ryvion.node.v1.NodeHeartbeatAck
-	(*WorkAssignment)(nil),      // 6: ryvion.node.v1.WorkAssignment
-	(*RuntimeRequirements)(nil), // 7: ryvion.node.v1.RuntimeRequirements
-	(*WorkLeaseRequest)(nil),    // 8: ryvion.node.v1.WorkLeaseRequest
-	(*WorkLeaseAck)(nil),        // 9: ryvion.node.v1.WorkLeaseAck
-	(*AbortCommand)(nil),        // 10: ryvion.node.v1.AbortCommand
-	(*DraftCommand)(nil),        // 11: ryvion.node.v1.DraftCommand
-	(*VerifierCommand)(nil),     // 12: ryvion.node.v1.VerifierCommand
-	(*RuntimeWarmCommand)(nil),  // 13: ryvion.node.v1.RuntimeWarmCommand
-	(*Ping)(nil),                // 14: ryvion.node.v1.Ping
-	(*DraftPacketBatch)(nil),    // 15: ryvion.node.v1.DraftPacketBatch
-	(*DraftPacketDecision)(nil), // 16: ryvion.node.v1.DraftPacketDecision
-	(*DraftPacketBatchAck)(nil), // 17: ryvion.node.v1.DraftPacketBatchAck
-	(*VerifierResult)(nil),      // 18: ryvion.node.v1.VerifierResult
-	(*WorkReceipt)(nil),         // 19: ryvion.node.v1.WorkReceipt
-	(*WorkReceiptAck)(nil),      // 20: ryvion.node.v1.WorkReceiptAck
-	(*structpb.Struct)(nil),     // 21: google.protobuf.Struct
+	(*NodeToHub)(nil),                // 0: ryvion.node.v1.NodeToHub
+	(*HubToNode)(nil),                // 1: ryvion.node.v1.HubToNode
+	(*Signature)(nil),                // 2: ryvion.node.v1.Signature
+	(*NodeHello)(nil),                // 3: ryvion.node.v1.NodeHello
+	(*NodeHeartbeat)(nil),            // 4: ryvion.node.v1.NodeHeartbeat
+	(*NodeHeartbeatAck)(nil),         // 5: ryvion.node.v1.NodeHeartbeatAck
+	(*WorkAssignment)(nil),           // 6: ryvion.node.v1.WorkAssignment
+	(*RuntimeRequirements)(nil),      // 7: ryvion.node.v1.RuntimeRequirements
+	(*WorkLeaseRequest)(nil),         // 8: ryvion.node.v1.WorkLeaseRequest
+	(*WorkLeaseAck)(nil),             // 9: ryvion.node.v1.WorkLeaseAck
+	(*AbortCommand)(nil),             // 10: ryvion.node.v1.AbortCommand
+	(*DraftCommand)(nil),             // 11: ryvion.node.v1.DraftCommand
+	(*VerifierCommand)(nil),          // 12: ryvion.node.v1.VerifierCommand
+	(*RuntimeWarmCommand)(nil),       // 13: ryvion.node.v1.RuntimeWarmCommand
+	(*Ping)(nil),                     // 14: ryvion.node.v1.Ping
+	(*DraftPacketBatch)(nil),         // 15: ryvion.node.v1.DraftPacketBatch
+	(*DraftPacketDecision)(nil),      // 16: ryvion.node.v1.DraftPacketDecision
+	(*DraftPacketBatchAck)(nil),      // 17: ryvion.node.v1.DraftPacketBatchAck
+	(*LiveLabCommandRequest)(nil),    // 18: ryvion.node.v1.LiveLabCommandRequest
+	(*LiveLabCommand)(nil),           // 19: ryvion.node.v1.LiveLabCommand
+	(*LiveLabVerifierResult)(nil),    // 20: ryvion.node.v1.LiveLabVerifierResult
+	(*LiveLabVerifierResultAck)(nil), // 21: ryvion.node.v1.LiveLabVerifierResultAck
+	(*VerifierResult)(nil),           // 22: ryvion.node.v1.VerifierResult
+	(*WorkReceipt)(nil),              // 23: ryvion.node.v1.WorkReceipt
+	(*WorkReceiptAck)(nil),           // 24: ryvion.node.v1.WorkReceiptAck
+	(*structpb.Struct)(nil),          // 25: google.protobuf.Struct
 }
 var file_ryvion_node_v1_gateway_proto_depIdxs = []int32{
 	3,  // 0: ryvion.node.v1.NodeToHub.hello:type_name -> ryvion.node.v1.NodeHello
 	4,  // 1: ryvion.node.v1.NodeToHub.heartbeat:type_name -> ryvion.node.v1.NodeHeartbeat
 	15, // 2: ryvion.node.v1.NodeToHub.draft_packet_batch:type_name -> ryvion.node.v1.DraftPacketBatch
-	18, // 3: ryvion.node.v1.NodeToHub.verifier_result:type_name -> ryvion.node.v1.VerifierResult
-	19, // 4: ryvion.node.v1.NodeToHub.receipt:type_name -> ryvion.node.v1.WorkReceipt
+	22, // 3: ryvion.node.v1.NodeToHub.verifier_result:type_name -> ryvion.node.v1.VerifierResult
+	23, // 4: ryvion.node.v1.NodeToHub.receipt:type_name -> ryvion.node.v1.WorkReceipt
 	8,  // 5: ryvion.node.v1.NodeToHub.work_lease_request:type_name -> ryvion.node.v1.WorkLeaseRequest
-	2,  // 6: ryvion.node.v1.NodeToHub.signature:type_name -> ryvion.node.v1.Signature
-	6,  // 7: ryvion.node.v1.HubToNode.assignment:type_name -> ryvion.node.v1.WorkAssignment
-	10, // 8: ryvion.node.v1.HubToNode.abort:type_name -> ryvion.node.v1.AbortCommand
-	11, // 9: ryvion.node.v1.HubToNode.draft_command:type_name -> ryvion.node.v1.DraftCommand
-	12, // 10: ryvion.node.v1.HubToNode.verifier_command:type_name -> ryvion.node.v1.VerifierCommand
-	13, // 11: ryvion.node.v1.HubToNode.runtime_warm:type_name -> ryvion.node.v1.RuntimeWarmCommand
-	14, // 12: ryvion.node.v1.HubToNode.ping:type_name -> ryvion.node.v1.Ping
-	5,  // 13: ryvion.node.v1.HubToNode.heartbeat_ack:type_name -> ryvion.node.v1.NodeHeartbeatAck
-	9,  // 14: ryvion.node.v1.HubToNode.work_lease_ack:type_name -> ryvion.node.v1.WorkLeaseAck
-	20, // 15: ryvion.node.v1.HubToNode.receipt_ack:type_name -> ryvion.node.v1.WorkReceiptAck
-	17, // 16: ryvion.node.v1.HubToNode.draft_packet_batch_ack:type_name -> ryvion.node.v1.DraftPacketBatchAck
-	21, // 17: ryvion.node.v1.NodeHeartbeat.capability_payload:type_name -> google.protobuf.Struct
-	21, // 18: ryvion.node.v1.NodeHeartbeat.network_profile:type_name -> google.protobuf.Struct
-	7,  // 19: ryvion.node.v1.WorkAssignment.runtime_requirements:type_name -> ryvion.node.v1.RuntimeRequirements
-	6,  // 20: ryvion.node.v1.WorkLeaseAck.assignment:type_name -> ryvion.node.v1.WorkAssignment
-	21, // 21: ryvion.node.v1.DraftCommand.policy:type_name -> google.protobuf.Struct
-	21, // 22: ryvion.node.v1.VerifierCommand.payload:type_name -> google.protobuf.Struct
-	21, // 23: ryvion.node.v1.RuntimeWarmCommand.runtime_tuning:type_name -> google.protobuf.Struct
-	21, // 24: ryvion.node.v1.DraftPacketBatch.packets:type_name -> google.protobuf.Struct
-	16, // 25: ryvion.node.v1.DraftPacketBatchAck.decisions:type_name -> ryvion.node.v1.DraftPacketDecision
-	21, // 26: ryvion.node.v1.VerifierResult.receipt:type_name -> google.protobuf.Struct
-	21, // 27: ryvion.node.v1.WorkReceipt.metadata:type_name -> google.protobuf.Struct
-	21, // 28: ryvion.node.v1.WorkReceiptAck.metadata:type_name -> google.protobuf.Struct
-	0,  // 29: ryvion.node.v1.NodeGateway.Connect:input_type -> ryvion.node.v1.NodeToHub
-	1,  // 30: ryvion.node.v1.NodeGateway.Connect:output_type -> ryvion.node.v1.HubToNode
-	30, // [30:31] is the sub-list for method output_type
-	29, // [29:30] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	18, // 6: ryvion.node.v1.NodeToHub.live_lab_command_request:type_name -> ryvion.node.v1.LiveLabCommandRequest
+	20, // 7: ryvion.node.v1.NodeToHub.live_lab_verifier_result:type_name -> ryvion.node.v1.LiveLabVerifierResult
+	2,  // 8: ryvion.node.v1.NodeToHub.signature:type_name -> ryvion.node.v1.Signature
+	6,  // 9: ryvion.node.v1.HubToNode.assignment:type_name -> ryvion.node.v1.WorkAssignment
+	10, // 10: ryvion.node.v1.HubToNode.abort:type_name -> ryvion.node.v1.AbortCommand
+	11, // 11: ryvion.node.v1.HubToNode.draft_command:type_name -> ryvion.node.v1.DraftCommand
+	12, // 12: ryvion.node.v1.HubToNode.verifier_command:type_name -> ryvion.node.v1.VerifierCommand
+	13, // 13: ryvion.node.v1.HubToNode.runtime_warm:type_name -> ryvion.node.v1.RuntimeWarmCommand
+	14, // 14: ryvion.node.v1.HubToNode.ping:type_name -> ryvion.node.v1.Ping
+	5,  // 15: ryvion.node.v1.HubToNode.heartbeat_ack:type_name -> ryvion.node.v1.NodeHeartbeatAck
+	9,  // 16: ryvion.node.v1.HubToNode.work_lease_ack:type_name -> ryvion.node.v1.WorkLeaseAck
+	24, // 17: ryvion.node.v1.HubToNode.receipt_ack:type_name -> ryvion.node.v1.WorkReceiptAck
+	17, // 18: ryvion.node.v1.HubToNode.draft_packet_batch_ack:type_name -> ryvion.node.v1.DraftPacketBatchAck
+	19, // 19: ryvion.node.v1.HubToNode.live_lab_command:type_name -> ryvion.node.v1.LiveLabCommand
+	21, // 20: ryvion.node.v1.HubToNode.live_lab_verifier_result_ack:type_name -> ryvion.node.v1.LiveLabVerifierResultAck
+	25, // 21: ryvion.node.v1.NodeHeartbeat.capability_payload:type_name -> google.protobuf.Struct
+	25, // 22: ryvion.node.v1.NodeHeartbeat.network_profile:type_name -> google.protobuf.Struct
+	7,  // 23: ryvion.node.v1.WorkAssignment.runtime_requirements:type_name -> ryvion.node.v1.RuntimeRequirements
+	6,  // 24: ryvion.node.v1.WorkLeaseAck.assignment:type_name -> ryvion.node.v1.WorkAssignment
+	25, // 25: ryvion.node.v1.DraftCommand.policy:type_name -> google.protobuf.Struct
+	25, // 26: ryvion.node.v1.VerifierCommand.payload:type_name -> google.protobuf.Struct
+	25, // 27: ryvion.node.v1.RuntimeWarmCommand.runtime_tuning:type_name -> google.protobuf.Struct
+	25, // 28: ryvion.node.v1.DraftPacketBatch.packets:type_name -> google.protobuf.Struct
+	16, // 29: ryvion.node.v1.DraftPacketBatchAck.decisions:type_name -> ryvion.node.v1.DraftPacketDecision
+	25, // 30: ryvion.node.v1.LiveLabCommand.payload:type_name -> google.protobuf.Struct
+	25, // 31: ryvion.node.v1.LiveLabVerifierResult.probe_summary:type_name -> google.protobuf.Struct
+	25, // 32: ryvion.node.v1.LiveLabVerifierResultAck.metadata:type_name -> google.protobuf.Struct
+	25, // 33: ryvion.node.v1.VerifierResult.receipt:type_name -> google.protobuf.Struct
+	25, // 34: ryvion.node.v1.WorkReceipt.metadata:type_name -> google.protobuf.Struct
+	25, // 35: ryvion.node.v1.WorkReceiptAck.metadata:type_name -> google.protobuf.Struct
+	0,  // 36: ryvion.node.v1.NodeGateway.Connect:input_type -> ryvion.node.v1.NodeToHub
+	1,  // 37: ryvion.node.v1.NodeGateway.Connect:output_type -> ryvion.node.v1.HubToNode
+	37, // [37:38] is the sub-list for method output_type
+	36, // [36:37] is the sub-list for method input_type
+	36, // [36:36] is the sub-list for extension type_name
+	36, // [36:36] is the sub-list for extension extendee
+	0,  // [0:36] is the sub-list for field type_name
 }
 
 func init() { file_ryvion_node_v1_gateway_proto_init() }
@@ -2264,6 +2757,8 @@ func file_ryvion_node_v1_gateway_proto_init() {
 		(*NodeToHub_VerifierResult)(nil),
 		(*NodeToHub_Receipt)(nil),
 		(*NodeToHub_WorkLeaseRequest)(nil),
+		(*NodeToHub_LiveLabCommandRequest)(nil),
+		(*NodeToHub_LiveLabVerifierResult)(nil),
 	}
 	file_ryvion_node_v1_gateway_proto_msgTypes[1].OneofWrappers = []any{
 		(*HubToNode_Assignment)(nil),
@@ -2276,6 +2771,8 @@ func file_ryvion_node_v1_gateway_proto_init() {
 		(*HubToNode_WorkLeaseAck)(nil),
 		(*HubToNode_ReceiptAck)(nil),
 		(*HubToNode_DraftPacketBatchAck)(nil),
+		(*HubToNode_LiveLabCommand)(nil),
+		(*HubToNode_LiveLabVerifierResultAck)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2283,7 +2780,7 @@ func file_ryvion_node_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ryvion_node_v1_gateway_proto_rawDesc), len(file_ryvion_node_v1_gateway_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

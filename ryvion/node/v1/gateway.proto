@@ -24,6 +24,8 @@ message NodeToHub {
     VerifierResult verifier_result = 13;
     WorkReceipt receipt = 14;
     WorkLeaseRequest work_lease_request = 15;
+    LiveLabCommandRequest live_lab_command_request = 16;
+    LiveLabVerifierResult live_lab_verifier_result = 17;
   }
 
   Signature signature = 100;
@@ -44,6 +46,8 @@ message HubToNode {
     WorkLeaseAck work_lease_ack = 17;
     WorkReceiptAck receipt_ack = 18;
     DraftPacketBatchAck draft_packet_batch_ack = 19;
+    LiveLabCommand live_lab_command = 20;
+    LiveLabVerifierResultAck live_lab_verifier_result_ack = 21;
   }
 }
 
@@ -187,6 +191,47 @@ message DraftPacketBatchAck {
   uint32 accepted = 4;
   uint32 rejected = 5;
   repeated DraftPacketDecision decisions = 6;
+}
+
+message LiveLabCommandRequest {
+  string run_id = 1;
+  string job_id = 2;
+  string role = 3;
+}
+
+message LiveLabCommand {
+  string schema_version = 1;
+  string run_id = 2;
+  string job_id = 3;
+  string role = 4;
+  string command = 5;
+  string command_id = 6;
+  string reason = 7;
+  google.protobuf.Struct payload = 8;
+}
+
+message LiveLabVerifierResult {
+  string run_id = 1;
+  string job_id = 2;
+  string window_id = 3;
+  uint32 wave_index = 4;
+  uint32 accepted_len = 5;
+  string tree_cid = 6;
+  int64 duration_ms = 7;
+  string accepted_text_hash = 8;
+  bool accepted_text_public = 9;
+  bool eos = 10;
+  string stop_reason = 11;
+  google.protobuf.Struct probe_summary = 12;
+}
+
+message LiveLabVerifierResultAck {
+  string schema_version = 1;
+  string status = 2;
+  string run_id = 3;
+  string window_id = 4;
+  string reason = 5;
+  google.protobuf.Struct metadata = 6;
 }
 
 message VerifierResult {
