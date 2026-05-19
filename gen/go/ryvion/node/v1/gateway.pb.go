@@ -575,24 +575,24 @@ func (x *NodeHeartbeat) GetNetworkProfile() *structpb.Struct {
 }
 
 type NodeHeartbeatAck struct {
-	state                 protoimpl.MessageState `protogen:"open.v1"`
-	Ok                    bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
-	NodeId                string                 `protobuf:"bytes,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
-	NextHeartbeatInterval uint32                 `protobuf:"varint,3,opt,name=next_heartbeat_interval,json=nextHeartbeatInterval,proto3" json:"next_heartbeat_interval,omitempty"`
-	CountryCode           string                 `protobuf:"bytes,4,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"`
-	LocationApproved      bool                   `protobuf:"varint,5,opt,name=location_approved,json=locationApproved,proto3" json:"location_approved,omitempty"`
-	SovereignVerified     bool                   `protobuf:"varint,6,opt,name=sovereign_verified,json=sovereignVerified,proto3" json:"sovereign_verified,omitempty"`
-	VerificationSource    string                 `protobuf:"bytes,7,opt,name=verification_source,json=verificationSource,proto3" json:"verification_source,omitempty"`
-	TrustReason           string                 `protobuf:"bytes,8,opt,name=trust_reason,json=trustReason,proto3" json:"trust_reason,omitempty"`
-	V7SnapshotUpserted    bool                   `protobuf:"varint,9,opt,name=v7_snapshot_upserted,json=v7SnapshotUpserted,proto3" json:"v7_snapshot_upserted,omitempty"`
-	SnapshotModelCount    uint32                 `protobuf:"varint,10,opt,name=snapshot_model_count,json=snapshotModelCount,proto3" json:"snapshot_model_count,omitempty"`
-	SnapshotBackendCount  uint32                 `protobuf:"varint,11,opt,name=snapshot_backend_count,json=snapshotBackendCount,proto3" json:"snapshot_backend_count,omitempty"`
-	HasCapabilityProfile  bool                   `protobuf:"varint,12,opt,name=has_capability_profile,json=hasCapabilityProfile,proto3" json:"has_capability_profile,omitempty"`
-	HubInstanceId         string                 `protobuf:"bytes,13,opt,name=hub_instance_id,json=hubInstanceId,proto3" json:"hub_instance_id,omitempty"`
-	IgnoredOptionalFields []string               `protobuf:"bytes,14,rep,name=ignored_optional_fields,json=ignoredOptionalFields,proto3" json:"ignored_optional_fields,omitempty"`
-	LatestVersion         string                 `protobuf:"bytes,15,opt,name=latest_version,json=latestVersion,proto3" json:"latest_version,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	Ok                        bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	NodeId                    string                 `protobuf:"bytes,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	NextHeartbeatInterval     uint32                 `protobuf:"varint,3,opt,name=next_heartbeat_interval,json=nextHeartbeatInterval,proto3" json:"next_heartbeat_interval,omitempty"`
+	CountryCode               string                 `protobuf:"bytes,4,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"`
+	LocationApproved          bool                   `protobuf:"varint,5,opt,name=location_approved,json=locationApproved,proto3" json:"location_approved,omitempty"`
+	SovereignVerified         bool                   `protobuf:"varint,6,opt,name=sovereign_verified,json=sovereignVerified,proto3" json:"sovereign_verified,omitempty"`
+	VerificationSource        string                 `protobuf:"bytes,7,opt,name=verification_source,json=verificationSource,proto3" json:"verification_source,omitempty"`
+	TrustReason               string                 `protobuf:"bytes,8,opt,name=trust_reason,json=trustReason,proto3" json:"trust_reason,omitempty"`
+	CapabilityProfileUpserted bool                   `protobuf:"varint,9,opt,name=capability_profile_upserted,json=capabilityProfileUpserted,proto3" json:"capability_profile_upserted,omitempty"`
+	ProfileRuntimeCount       uint32                 `protobuf:"varint,10,opt,name=profile_runtime_count,json=profileRuntimeCount,proto3" json:"profile_runtime_count,omitempty"`
+	ProfileBackendCount       uint32                 `protobuf:"varint,11,opt,name=profile_backend_count,json=profileBackendCount,proto3" json:"profile_backend_count,omitempty"`
+	HasCapabilityProfile      bool                   `protobuf:"varint,12,opt,name=has_capability_profile,json=hasCapabilityProfile,proto3" json:"has_capability_profile,omitempty"`
+	HubInstanceId             string                 `protobuf:"bytes,13,opt,name=hub_instance_id,json=hubInstanceId,proto3" json:"hub_instance_id,omitempty"`
+	IgnoredOptionalFields     []string               `protobuf:"bytes,14,rep,name=ignored_optional_fields,json=ignoredOptionalFields,proto3" json:"ignored_optional_fields,omitempty"`
+	LatestVersion             string                 `protobuf:"bytes,15,opt,name=latest_version,json=latestVersion,proto3" json:"latest_version,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
 }
 
 func (x *NodeHeartbeatAck) Reset() {
@@ -681,23 +681,23 @@ func (x *NodeHeartbeatAck) GetTrustReason() string {
 	return ""
 }
 
-func (x *NodeHeartbeatAck) GetV7SnapshotUpserted() bool {
+func (x *NodeHeartbeatAck) GetCapabilityProfileUpserted() bool {
 	if x != nil {
-		return x.V7SnapshotUpserted
+		return x.CapabilityProfileUpserted
 	}
 	return false
 }
 
-func (x *NodeHeartbeatAck) GetSnapshotModelCount() uint32 {
+func (x *NodeHeartbeatAck) GetProfileRuntimeCount() uint32 {
 	if x != nil {
-		return x.SnapshotModelCount
+		return x.ProfileRuntimeCount
 	}
 	return 0
 }
 
-func (x *NodeHeartbeatAck) GetSnapshotBackendCount() uint32 {
+func (x *NodeHeartbeatAck) GetProfileBackendCount() uint32 {
 	if x != nil {
-		return x.SnapshotBackendCount
+		return x.ProfileBackendCount
 	}
 	return 0
 }
@@ -863,21 +863,18 @@ func (x *WorkAssignment) GetRuntimeRequirements() *RuntimeRequirements {
 }
 
 type RuntimeRequirements struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	NeedsGpu             bool                   `protobuf:"varint,1,opt,name=needs_gpu,json=needsGpu,proto3" json:"needs_gpu,omitempty"`
-	NeedsManagedOci      bool                   `protobuf:"varint,2,opt,name=needs_managed_oci,json=needsManagedOci,proto3" json:"needs_managed_oci,omitempty"`
-	NeedsManagedOciGpu   bool                   `protobuf:"varint,3,opt,name=needs_managed_oci_gpu,json=needsManagedOciGpu,proto3" json:"needs_managed_oci_gpu,omitempty"`
-	NeedsRyvionRuntime   bool                   `protobuf:"varint,4,opt,name=needs_ryvion_runtime,json=needsRyvionRuntime,proto3" json:"needs_ryvion_runtime,omitempty"`
-	NeedsNativeStreaming bool                   `protobuf:"varint,5,opt,name=needs_native_streaming,json=needsNativeStreaming,proto3" json:"needs_native_streaming,omitempty"`
-	NeedsNativeReport    bool                   `protobuf:"varint,6,opt,name=needs_native_report,json=needsNativeReport,proto3" json:"needs_native_report,omitempty"`
-	NeedsAgentHosting    bool                   `protobuf:"varint,7,opt,name=needs_agent_hosting,json=needsAgentHosting,proto3" json:"needs_agent_hosting,omitempty"`
-	Tooling              []string               `protobuf:"bytes,8,rep,name=tooling,proto3" json:"tooling,omitempty"`
-	MinDiskGb            uint64                 `protobuf:"varint,9,opt,name=min_disk_gb,json=minDiskGb,proto3" json:"min_disk_gb,omitempty"`
-	MinVramMb            uint32                 `protobuf:"varint,10,opt,name=min_vram_mb,json=minVramMb,proto3" json:"min_vram_mb,omitempty"`
-	Jurisdiction         string                 `protobuf:"bytes,11,opt,name=jurisdiction,proto3" json:"jurisdiction,omitempty"`
-	TrustLevel           string                 `protobuf:"bytes,12,opt,name=trust_level,json=trustLevel,proto3" json:"trust_level,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	NeedsGpu           bool                   `protobuf:"varint,1,opt,name=needs_gpu,json=needsGpu,proto3" json:"needs_gpu,omitempty"`
+	NeedsManagedOci    bool                   `protobuf:"varint,2,opt,name=needs_managed_oci,json=needsManagedOci,proto3" json:"needs_managed_oci,omitempty"`
+	NeedsManagedOciGpu bool                   `protobuf:"varint,3,opt,name=needs_managed_oci_gpu,json=needsManagedOciGpu,proto3" json:"needs_managed_oci_gpu,omitempty"`
+	NeedsRyvionRuntime bool                   `protobuf:"varint,4,opt,name=needs_ryvion_runtime,json=needsRyvionRuntime,proto3" json:"needs_ryvion_runtime,omitempty"`
+	Tooling            []string               `protobuf:"bytes,8,rep,name=tooling,proto3" json:"tooling,omitempty"`
+	MinDiskGb          uint64                 `protobuf:"varint,9,opt,name=min_disk_gb,json=minDiskGb,proto3" json:"min_disk_gb,omitempty"`
+	MinVramMb          uint32                 `protobuf:"varint,10,opt,name=min_vram_mb,json=minVramMb,proto3" json:"min_vram_mb,omitempty"`
+	Jurisdiction       string                 `protobuf:"bytes,11,opt,name=jurisdiction,proto3" json:"jurisdiction,omitempty"`
+	TrustLevel         string                 `protobuf:"bytes,12,opt,name=trust_level,json=trustLevel,proto3" json:"trust_level,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *RuntimeRequirements) Reset() {
@@ -934,27 +931,6 @@ func (x *RuntimeRequirements) GetNeedsManagedOciGpu() bool {
 func (x *RuntimeRequirements) GetNeedsRyvionRuntime() bool {
 	if x != nil {
 		return x.NeedsRyvionRuntime
-	}
-	return false
-}
-
-func (x *RuntimeRequirements) GetNeedsNativeStreaming() bool {
-	if x != nil {
-		return x.NeedsNativeStreaming
-	}
-	return false
-}
-
-func (x *RuntimeRequirements) GetNeedsNativeReport() bool {
-	if x != nil {
-		return x.NeedsNativeReport
-	}
-	return false
-}
-
-func (x *RuntimeRequirements) GetNeedsAgentHosting() bool {
-	if x != nil {
-		return x.NeedsAgentHosting
 	}
 	return false
 }
@@ -1382,7 +1358,7 @@ var File_ryvion_node_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\n" +
-	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xe2\x03\n" +
+	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xbd\x03\n" +
 	"\tNodeToHub\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12\x1d\n" +
 	"\n" +
@@ -1394,7 +1370,7 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\areceipt\x18\x0e \x01(\v2\x1b.ryvion.node.v1.WorkReceiptH\x00R\areceipt\x12P\n" +
 	"\x12work_lease_request\x18\x0f \x01(\v2 .ryvion.node.v1.WorkLeaseRequestH\x00R\x10workLeaseRequest\x127\n" +
 	"\tsignature\x18d \x01(\v2\x19.ryvion.node.v1.SignatureR\tsignatureB\t\n" +
-	"\apayloadJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eR\x12draft_packet_batchR\x0fverifier_result\"\xb7\x04\n" +
+	"\apayloadJ\x04\b\f\x10\rJ\x04\b\r\x10\x0e\"\xf0\x03\n" +
 	"\tHubToNode\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12+\n" +
@@ -1409,7 +1385,7 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x0ework_lease_ack\x18\x11 \x01(\v2\x1c.ryvion.node.v1.WorkLeaseAckH\x00R\fworkLeaseAck\x12A\n" +
 	"\vreceipt_ack\x18\x12 \x01(\v2\x1e.ryvion.node.v1.WorkReceiptAckH\x00R\n" +
 	"receiptAckB\t\n" +
-	"\apayloadJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fJ\x04\b\x13\x10\x14R\rdraft_commandR\x10verifier_commandR\fruntime_warmR\x16draft_packet_batch_ack\"^\n" +
+	"\apayloadJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fJ\x04\b\x13\x10\x14\"^\n" +
 	"\tSignature\x12\x15\n" +
 	"\x06key_id\x18\x01 \x01(\tR\x05keyId\x12\x1c\n" +
 	"\talgorithm\x18\x02 \x01(\tR\talgorithm\x12\x1c\n" +
@@ -1431,7 +1407,7 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\rgpu_throttled\x18\b \x01(\bR\fgpuThrottled\x12'\n" +
 	"\x0fsystem_timezone\x18\t \x01(\tR\x0esystemTimezone\x12@\n" +
 	"\x0fnetwork_profile\x18\n" +
-	" \x01(\v2\x17.google.protobuf.StructR\x0enetworkProfile\"\x9d\x05\n" +
+	" \x01(\v2\x17.google.protobuf.StructR\x0enetworkProfile\"\xab\x05\n" +
 	"\x10NodeHeartbeatAck\x12\x0e\n" +
 	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x17\n" +
 	"\anode_id\x18\x02 \x01(\tR\x06nodeId\x126\n" +
@@ -1440,11 +1416,11 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x11location_approved\x18\x05 \x01(\bR\x10locationApproved\x12-\n" +
 	"\x12sovereign_verified\x18\x06 \x01(\bR\x11sovereignVerified\x12/\n" +
 	"\x13verification_source\x18\a \x01(\tR\x12verificationSource\x12!\n" +
-	"\ftrust_reason\x18\b \x01(\tR\vtrustReason\x120\n" +
-	"\x14v7_snapshot_upserted\x18\t \x01(\bR\x12v7SnapshotUpserted\x120\n" +
-	"\x14snapshot_model_count\x18\n" +
-	" \x01(\rR\x12snapshotModelCount\x124\n" +
-	"\x16snapshot_backend_count\x18\v \x01(\rR\x14snapshotBackendCount\x124\n" +
+	"\ftrust_reason\x18\b \x01(\tR\vtrustReason\x12>\n" +
+	"\x1bcapability_profile_upserted\x18\t \x01(\bR\x19capabilityProfileUpserted\x122\n" +
+	"\x15profile_runtime_count\x18\n" +
+	" \x01(\rR\x13profileRuntimeCount\x122\n" +
+	"\x15profile_backend_count\x18\v \x01(\rR\x13profileBackendCount\x124\n" +
 	"\x16has_capability_profile\x18\f \x01(\bR\x14hasCapabilityProfile\x12&\n" +
 	"\x0fhub_instance_id\x18\r \x01(\tR\rhubInstanceId\x126\n" +
 	"\x17ignored_optional_fields\x18\x0e \x03(\tR\x15ignoredOptionalFields\x12%\n" +
@@ -1464,22 +1440,19 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x0eprice_per_unit\x18\n" +
 	" \x01(\x04R\fpricePerUnit\x12'\n" +
 	"\x0fassurance_class\x18\v \x01(\tR\x0eassuranceClass\x12V\n" +
-	"\x14runtime_requirements\x18\f \x01(\v2#.ryvion.node.v1.RuntimeRequirementsR\x13runtimeRequirements\"\xf8\x03\n" +
+	"\x14runtime_requirements\x18\f \x01(\v2#.ryvion.node.v1.RuntimeRequirementsR\x13runtimeRequirements\"\xf4\x02\n" +
 	"\x13RuntimeRequirements\x12\x1b\n" +
 	"\tneeds_gpu\x18\x01 \x01(\bR\bneedsGpu\x12*\n" +
 	"\x11needs_managed_oci\x18\x02 \x01(\bR\x0fneedsManagedOci\x121\n" +
 	"\x15needs_managed_oci_gpu\x18\x03 \x01(\bR\x12needsManagedOciGpu\x120\n" +
-	"\x14needs_ryvion_runtime\x18\x04 \x01(\bR\x12needsRyvionRuntime\x124\n" +
-	"\x16needs_native_streaming\x18\x05 \x01(\bR\x14needsNativeStreaming\x12.\n" +
-	"\x13needs_native_report\x18\x06 \x01(\bR\x11needsNativeReport\x12.\n" +
-	"\x13needs_agent_hosting\x18\a \x01(\bR\x11needsAgentHosting\x12\x18\n" +
+	"\x14needs_ryvion_runtime\x18\x04 \x01(\bR\x12needsRyvionRuntime\x12\x18\n" +
 	"\atooling\x18\b \x03(\tR\atooling\x12\x1e\n" +
 	"\vmin_disk_gb\x18\t \x01(\x04R\tminDiskGb\x12\x1e\n" +
 	"\vmin_vram_mb\x18\n" +
 	" \x01(\rR\tminVramMb\x12\"\n" +
 	"\fjurisdiction\x18\v \x01(\tR\fjurisdiction\x12\x1f\n" +
 	"\vtrust_level\x18\f \x01(\tR\n" +
-	"trustLevel\"x\n" +
+	"trustLevelJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aJ\x04\b\a\x10\b\"x\n" +
 	"\x10WorkLeaseRequest\x12$\n" +
 	"\x0epublic_key_hex\x18\x01 \x01(\tR\fpublicKeyHex\x12!\n" +
 	"\ftimestamp_ms\x18\x02 \x01(\x03R\vtimestampMs\x12\x1b\n" +
