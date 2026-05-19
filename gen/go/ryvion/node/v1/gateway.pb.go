@@ -7,7 +7,6 @@
 package nodev1
 
 import (
-	v1 "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/speculative/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -32,8 +31,6 @@ type NodeToHub struct {
 	//
 	//	*NodeToHub_Hello
 	//	*NodeToHub_Heartbeat
-	//	*NodeToHub_DraftPacketBatch
-	//	*NodeToHub_VerifierResult
 	//	*NodeToHub_Receipt
 	//	*NodeToHub_WorkLeaseRequest
 	Payload       isNodeToHub_Payload `protobuf_oneof:"payload"`
@@ -118,24 +115,6 @@ func (x *NodeToHub) GetHeartbeat() *NodeHeartbeat {
 	return nil
 }
 
-func (x *NodeToHub) GetDraftPacketBatch() *DraftPacketBatch {
-	if x != nil {
-		if x, ok := x.Payload.(*NodeToHub_DraftPacketBatch); ok {
-			return x.DraftPacketBatch
-		}
-	}
-	return nil
-}
-
-func (x *NodeToHub) GetVerifierResult() *VerifierResult {
-	if x != nil {
-		if x, ok := x.Payload.(*NodeToHub_VerifierResult); ok {
-			return x.VerifierResult
-		}
-	}
-	return nil
-}
-
 func (x *NodeToHub) GetReceipt() *WorkReceipt {
 	if x != nil {
 		if x, ok := x.Payload.(*NodeToHub_Receipt); ok {
@@ -173,14 +152,6 @@ type NodeToHub_Heartbeat struct {
 	Heartbeat *NodeHeartbeat `protobuf:"bytes,11,opt,name=heartbeat,proto3,oneof"`
 }
 
-type NodeToHub_DraftPacketBatch struct {
-	DraftPacketBatch *DraftPacketBatch `protobuf:"bytes,12,opt,name=draft_packet_batch,json=draftPacketBatch,proto3,oneof"`
-}
-
-type NodeToHub_VerifierResult struct {
-	VerifierResult *VerifierResult `protobuf:"bytes,13,opt,name=verifier_result,json=verifierResult,proto3,oneof"`
-}
-
 type NodeToHub_Receipt struct {
 	Receipt *WorkReceipt `protobuf:"bytes,14,opt,name=receipt,proto3,oneof"`
 }
@@ -192,10 +163,6 @@ type NodeToHub_WorkLeaseRequest struct {
 func (*NodeToHub_Hello) isNodeToHub_Payload() {}
 
 func (*NodeToHub_Heartbeat) isNodeToHub_Payload() {}
-
-func (*NodeToHub_DraftPacketBatch) isNodeToHub_Payload() {}
-
-func (*NodeToHub_VerifierResult) isNodeToHub_Payload() {}
 
 func (*NodeToHub_Receipt) isNodeToHub_Payload() {}
 
@@ -209,14 +176,10 @@ type HubToNode struct {
 	//
 	//	*HubToNode_Assignment
 	//	*HubToNode_Abort
-	//	*HubToNode_DraftCommand
-	//	*HubToNode_VerifierCommand
-	//	*HubToNode_RuntimeWarm
 	//	*HubToNode_Ping
 	//	*HubToNode_HeartbeatAck
 	//	*HubToNode_WorkLeaseAck
 	//	*HubToNode_ReceiptAck
-	//	*HubToNode_DraftPacketBatchAck
 	Payload       isHubToNode_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -291,33 +254,6 @@ func (x *HubToNode) GetAbort() *AbortCommand {
 	return nil
 }
 
-func (x *HubToNode) GetDraftCommand() *DraftCommand {
-	if x != nil {
-		if x, ok := x.Payload.(*HubToNode_DraftCommand); ok {
-			return x.DraftCommand
-		}
-	}
-	return nil
-}
-
-func (x *HubToNode) GetVerifierCommand() *VerifierCommand {
-	if x != nil {
-		if x, ok := x.Payload.(*HubToNode_VerifierCommand); ok {
-			return x.VerifierCommand
-		}
-	}
-	return nil
-}
-
-func (x *HubToNode) GetRuntimeWarm() *RuntimeWarmCommand {
-	if x != nil {
-		if x, ok := x.Payload.(*HubToNode_RuntimeWarm); ok {
-			return x.RuntimeWarm
-		}
-	}
-	return nil
-}
-
 func (x *HubToNode) GetPing() *Ping {
 	if x != nil {
 		if x, ok := x.Payload.(*HubToNode_Ping); ok {
@@ -354,15 +290,6 @@ func (x *HubToNode) GetReceiptAck() *WorkReceiptAck {
 	return nil
 }
 
-func (x *HubToNode) GetDraftPacketBatchAck() *DraftPacketBatchAck {
-	if x != nil {
-		if x, ok := x.Payload.(*HubToNode_DraftPacketBatchAck); ok {
-			return x.DraftPacketBatchAck
-		}
-	}
-	return nil
-}
-
 type isHubToNode_Payload interface {
 	isHubToNode_Payload()
 }
@@ -373,18 +300,6 @@ type HubToNode_Assignment struct {
 
 type HubToNode_Abort struct {
 	Abort *AbortCommand `protobuf:"bytes,11,opt,name=abort,proto3,oneof"`
-}
-
-type HubToNode_DraftCommand struct {
-	DraftCommand *DraftCommand `protobuf:"bytes,12,opt,name=draft_command,json=draftCommand,proto3,oneof"`
-}
-
-type HubToNode_VerifierCommand struct {
-	VerifierCommand *VerifierCommand `protobuf:"bytes,13,opt,name=verifier_command,json=verifierCommand,proto3,oneof"`
-}
-
-type HubToNode_RuntimeWarm struct {
-	RuntimeWarm *RuntimeWarmCommand `protobuf:"bytes,14,opt,name=runtime_warm,json=runtimeWarm,proto3,oneof"`
 }
 
 type HubToNode_Ping struct {
@@ -403,19 +318,9 @@ type HubToNode_ReceiptAck struct {
 	ReceiptAck *WorkReceiptAck `protobuf:"bytes,18,opt,name=receipt_ack,json=receiptAck,proto3,oneof"`
 }
 
-type HubToNode_DraftPacketBatchAck struct {
-	DraftPacketBatchAck *DraftPacketBatchAck `protobuf:"bytes,19,opt,name=draft_packet_batch_ack,json=draftPacketBatchAck,proto3,oneof"`
-}
-
 func (*HubToNode_Assignment) isHubToNode_Payload() {}
 
 func (*HubToNode_Abort) isHubToNode_Payload() {}
-
-func (*HubToNode_DraftCommand) isHubToNode_Payload() {}
-
-func (*HubToNode_VerifierCommand) isHubToNode_Payload() {}
-
-func (*HubToNode_RuntimeWarm) isHubToNode_Payload() {}
 
 func (*HubToNode_Ping) isHubToNode_Payload() {}
 
@@ -424,8 +329,6 @@ func (*HubToNode_HeartbeatAck) isHubToNode_Payload() {}
 func (*HubToNode_WorkLeaseAck) isHubToNode_Payload() {}
 
 func (*HubToNode_ReceiptAck) isHubToNode_Payload() {}
-
-func (*HubToNode_DraftPacketBatchAck) isHubToNode_Payload() {}
 
 type Signature struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1279,234 +1182,6 @@ func (x *AbortCommand) GetReason() string {
 	return ""
 }
 
-type DraftCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RunId         string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
-	WindowId      string                 `protobuf:"bytes,2,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
-	WorkgraphId   string                 `protobuf:"bytes,3,opt,name=workgraph_id,json=workgraphId,proto3" json:"workgraph_id,omitempty"`
-	PrefixHash    string                 `protobuf:"bytes,4,opt,name=prefix_hash,json=prefixHash,proto3" json:"prefix_hash,omitempty"`
-	Horizon       uint32                 `protobuf:"varint,5,opt,name=horizon,proto3" json:"horizon,omitempty"`
-	BranchCount   uint32                 `protobuf:"varint,6,opt,name=branch_count,json=branchCount,proto3" json:"branch_count,omitempty"`
-	Policy        *structpb.Struct       `protobuf:"bytes,7,opt,name=policy,proto3" json:"policy,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DraftCommand) Reset() {
-	*x = DraftCommand{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DraftCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DraftCommand) ProtoMessage() {}
-
-func (x *DraftCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DraftCommand.ProtoReflect.Descriptor instead.
-func (*DraftCommand) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *DraftCommand) GetRunId() string {
-	if x != nil {
-		return x.RunId
-	}
-	return ""
-}
-
-func (x *DraftCommand) GetWindowId() string {
-	if x != nil {
-		return x.WindowId
-	}
-	return ""
-}
-
-func (x *DraftCommand) GetWorkgraphId() string {
-	if x != nil {
-		return x.WorkgraphId
-	}
-	return ""
-}
-
-func (x *DraftCommand) GetPrefixHash() string {
-	if x != nil {
-		return x.PrefixHash
-	}
-	return ""
-}
-
-func (x *DraftCommand) GetHorizon() uint32 {
-	if x != nil {
-		return x.Horizon
-	}
-	return 0
-}
-
-func (x *DraftCommand) GetBranchCount() uint32 {
-	if x != nil {
-		return x.BranchCount
-	}
-	return 0
-}
-
-func (x *DraftCommand) GetPolicy() *structpb.Struct {
-	if x != nil {
-		return x.Policy
-	}
-	return nil
-}
-
-type VerifierCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RunId         string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
-	SessionId     string                 `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	CommandId     string                 `protobuf:"bytes,3,opt,name=command_id,json=commandId,proto3" json:"command_id,omitempty"`
-	Method        string                 `protobuf:"bytes,4,opt,name=method,proto3" json:"method,omitempty"`
-	Payload       *structpb.Struct       `protobuf:"bytes,5,opt,name=payload,proto3" json:"payload,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VerifierCommand) Reset() {
-	*x = VerifierCommand{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VerifierCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VerifierCommand) ProtoMessage() {}
-
-func (x *VerifierCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VerifierCommand.ProtoReflect.Descriptor instead.
-func (*VerifierCommand) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *VerifierCommand) GetRunId() string {
-	if x != nil {
-		return x.RunId
-	}
-	return ""
-}
-
-func (x *VerifierCommand) GetSessionId() string {
-	if x != nil {
-		return x.SessionId
-	}
-	return ""
-}
-
-func (x *VerifierCommand) GetCommandId() string {
-	if x != nil {
-		return x.CommandId
-	}
-	return ""
-}
-
-func (x *VerifierCommand) GetMethod() string {
-	if x != nil {
-		return x.Method
-	}
-	return ""
-}
-
-func (x *VerifierCommand) GetPayload() *structpb.Struct {
-	if x != nil {
-		return x.Payload
-	}
-	return nil
-}
-
-type RuntimeWarmCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ModelId       string                 `protobuf:"bytes,1,opt,name=model_id,json=modelId,proto3" json:"model_id,omitempty"`
-	ModelPath     string                 `protobuf:"bytes,2,opt,name=model_path,json=modelPath,proto3" json:"model_path,omitempty"`
-	RuntimeTuning *structpb.Struct       `protobuf:"bytes,3,opt,name=runtime_tuning,json=runtimeTuning,proto3" json:"runtime_tuning,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *RuntimeWarmCommand) Reset() {
-	*x = RuntimeWarmCommand{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RuntimeWarmCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RuntimeWarmCommand) ProtoMessage() {}
-
-func (x *RuntimeWarmCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RuntimeWarmCommand.ProtoReflect.Descriptor instead.
-func (*RuntimeWarmCommand) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *RuntimeWarmCommand) GetModelId() string {
-	if x != nil {
-		return x.ModelId
-	}
-	return ""
-}
-
-func (x *RuntimeWarmCommand) GetModelPath() string {
-	if x != nil {
-		return x.ModelPath
-	}
-	return ""
-}
-
-func (x *RuntimeWarmCommand) GetRuntimeTuning() *structpb.Struct {
-	if x != nil {
-		return x.RuntimeTuning
-	}
-	return nil
-}
-
 type Ping struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Nonce         string                 `protobuf:"bytes,1,opt,name=nonce,proto3" json:"nonce,omitempty"`
@@ -1516,7 +1191,7 @@ type Ping struct {
 
 func (x *Ping) Reset() {
 	*x = Ping{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[14]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1528,7 +1203,7 @@ func (x *Ping) String() string {
 func (*Ping) ProtoMessage() {}
 
 func (x *Ping) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[14]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1541,7 +1216,7 @@ func (x *Ping) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ping.ProtoReflect.Descriptor instead.
 func (*Ping) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{14}
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Ping) GetNonce() string {
@@ -1549,294 +1224,6 @@ func (x *Ping) GetNonce() string {
 		return x.Nonce
 	}
 	return ""
-}
-
-type DraftPacketBatch struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RunId         string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
-	WindowId      string                 `protobuf:"bytes,2,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
-	Packets       []*v1.DraftPacket      `protobuf:"bytes,3,rep,name=packets,proto3" json:"packets,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DraftPacketBatch) Reset() {
-	*x = DraftPacketBatch{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DraftPacketBatch) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DraftPacketBatch) ProtoMessage() {}
-
-func (x *DraftPacketBatch) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DraftPacketBatch.ProtoReflect.Descriptor instead.
-func (*DraftPacketBatch) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *DraftPacketBatch) GetRunId() string {
-	if x != nil {
-		return x.RunId
-	}
-	return ""
-}
-
-func (x *DraftPacketBatch) GetWindowId() string {
-	if x != nil {
-		return x.WindowId
-	}
-	return ""
-}
-
-func (x *DraftPacketBatch) GetPackets() []*v1.DraftPacket {
-	if x != nil {
-		return x.Packets
-	}
-	return nil
-}
-
-type DraftPacketDecision struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PacketId      string                 `protobuf:"bytes,1,opt,name=packet_id,json=packetId,proto3" json:"packet_id,omitempty"`
-	Accepted      bool                   `protobuf:"varint,2,opt,name=accepted,proto3" json:"accepted,omitempty"`
-	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DraftPacketDecision) Reset() {
-	*x = DraftPacketDecision{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DraftPacketDecision) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DraftPacketDecision) ProtoMessage() {}
-
-func (x *DraftPacketDecision) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DraftPacketDecision.ProtoReflect.Descriptor instead.
-func (*DraftPacketDecision) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{16}
-}
-
-func (x *DraftPacketDecision) GetPacketId() string {
-	if x != nil {
-		return x.PacketId
-	}
-	return ""
-}
-
-func (x *DraftPacketDecision) GetAccepted() bool {
-	if x != nil {
-		return x.Accepted
-	}
-	return false
-}
-
-func (x *DraftPacketDecision) GetReason() string {
-	if x != nil {
-		return x.Reason
-	}
-	return ""
-}
-
-type DraftPacketBatchAck struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SchemaVersion string                 `protobuf:"bytes,1,opt,name=schema_version,json=schemaVersion,proto3" json:"schema_version,omitempty"`
-	WindowId      string                 `protobuf:"bytes,2,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
-	Attempted     uint32                 `protobuf:"varint,3,opt,name=attempted,proto3" json:"attempted,omitempty"`
-	Accepted      uint32                 `protobuf:"varint,4,opt,name=accepted,proto3" json:"accepted,omitempty"`
-	Rejected      uint32                 `protobuf:"varint,5,opt,name=rejected,proto3" json:"rejected,omitempty"`
-	Decisions     []*DraftPacketDecision `protobuf:"bytes,6,rep,name=decisions,proto3" json:"decisions,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DraftPacketBatchAck) Reset() {
-	*x = DraftPacketBatchAck{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DraftPacketBatchAck) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DraftPacketBatchAck) ProtoMessage() {}
-
-func (x *DraftPacketBatchAck) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DraftPacketBatchAck.ProtoReflect.Descriptor instead.
-func (*DraftPacketBatchAck) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{17}
-}
-
-func (x *DraftPacketBatchAck) GetSchemaVersion() string {
-	if x != nil {
-		return x.SchemaVersion
-	}
-	return ""
-}
-
-func (x *DraftPacketBatchAck) GetWindowId() string {
-	if x != nil {
-		return x.WindowId
-	}
-	return ""
-}
-
-func (x *DraftPacketBatchAck) GetAttempted() uint32 {
-	if x != nil {
-		return x.Attempted
-	}
-	return 0
-}
-
-func (x *DraftPacketBatchAck) GetAccepted() uint32 {
-	if x != nil {
-		return x.Accepted
-	}
-	return 0
-}
-
-func (x *DraftPacketBatchAck) GetRejected() uint32 {
-	if x != nil {
-		return x.Rejected
-	}
-	return 0
-}
-
-func (x *DraftPacketBatchAck) GetDecisions() []*DraftPacketDecision {
-	if x != nil {
-		return x.Decisions
-	}
-	return nil
-}
-
-type VerifierResult struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	RunId             string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
-	CommandId         string                 `protobuf:"bytes,2,opt,name=command_id,json=commandId,proto3" json:"command_id,omitempty"`
-	TreeCid           string                 `protobuf:"bytes,3,opt,name=tree_cid,json=treeCid,proto3" json:"tree_cid,omitempty"`
-	AcceptedLen       uint32                 `protobuf:"varint,4,opt,name=accepted_len,json=acceptedLen,proto3" json:"accepted_len,omitempty"`
-	AcceptedTokenHash string                 `protobuf:"bytes,5,opt,name=accepted_token_hash,json=acceptedTokenHash,proto3" json:"accepted_token_hash,omitempty"`
-	Receipt           *structpb.Struct       `protobuf:"bytes,6,opt,name=receipt,proto3" json:"receipt,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
-}
-
-func (x *VerifierResult) Reset() {
-	*x = VerifierResult{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VerifierResult) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VerifierResult) ProtoMessage() {}
-
-func (x *VerifierResult) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VerifierResult.ProtoReflect.Descriptor instead.
-func (*VerifierResult) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{18}
-}
-
-func (x *VerifierResult) GetRunId() string {
-	if x != nil {
-		return x.RunId
-	}
-	return ""
-}
-
-func (x *VerifierResult) GetCommandId() string {
-	if x != nil {
-		return x.CommandId
-	}
-	return ""
-}
-
-func (x *VerifierResult) GetTreeCid() string {
-	if x != nil {
-		return x.TreeCid
-	}
-	return ""
-}
-
-func (x *VerifierResult) GetAcceptedLen() uint32 {
-	if x != nil {
-		return x.AcceptedLen
-	}
-	return 0
-}
-
-func (x *VerifierResult) GetAcceptedTokenHash() string {
-	if x != nil {
-		return x.AcceptedTokenHash
-	}
-	return ""
-}
-
-func (x *VerifierResult) GetReceipt() *structpb.Struct {
-	if x != nil {
-		return x.Receipt
-	}
-	return nil
 }
 
 type WorkReceipt struct {
@@ -1852,7 +1239,7 @@ type WorkReceipt struct {
 
 func (x *WorkReceipt) Reset() {
 	*x = WorkReceipt{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[19]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1864,7 +1251,7 @@ func (x *WorkReceipt) String() string {
 func (*WorkReceipt) ProtoMessage() {}
 
 func (x *WorkReceipt) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[19]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1877,7 +1264,7 @@ func (x *WorkReceipt) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkReceipt.ProtoReflect.Descriptor instead.
 func (*WorkReceipt) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{19}
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *WorkReceipt) GetJobId() string {
@@ -1928,7 +1315,7 @@ type WorkReceiptAck struct {
 
 func (x *WorkReceiptAck) Reset() {
 	*x = WorkReceiptAck{}
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[20]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1940,7 +1327,7 @@ func (x *WorkReceiptAck) String() string {
 func (*WorkReceiptAck) ProtoMessage() {}
 
 func (x *WorkReceiptAck) ProtoReflect() protoreflect.Message {
-	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[20]
+	mi := &file_ryvion_node_v1_gateway_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1953,7 +1340,7 @@ func (x *WorkReceiptAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkReceiptAck.ProtoReflect.Descriptor instead.
 func (*WorkReceiptAck) Descriptor() ([]byte, []int) {
-	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{20}
+	return file_ryvion_node_v1_gateway_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *WorkReceiptAck) GetAccepted() bool {
@@ -1995,7 +1382,7 @@ var File_ryvion_node_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\n" +
-	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a(ryvion/speculative/v1/draft_packet.proto\"\xce\x04\n" +
+	"\x1cryvion/node/v1/gateway.proto\x12\x0eryvion.node.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xe2\x03\n" +
 	"\tNodeToHub\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12\x1d\n" +
 	"\n" +
@@ -2003,13 +1390,11 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x12created_at_unix_ms\x18\x03 \x01(\x03R\x0fcreatedAtUnixMs\x121\n" +
 	"\x05hello\x18\n" +
 	" \x01(\v2\x19.ryvion.node.v1.NodeHelloH\x00R\x05hello\x12=\n" +
-	"\theartbeat\x18\v \x01(\v2\x1d.ryvion.node.v1.NodeHeartbeatH\x00R\theartbeat\x12P\n" +
-	"\x12draft_packet_batch\x18\f \x01(\v2 .ryvion.node.v1.DraftPacketBatchH\x00R\x10draftPacketBatch\x12I\n" +
-	"\x0fverifier_result\x18\r \x01(\v2\x1e.ryvion.node.v1.VerifierResultH\x00R\x0everifierResult\x127\n" +
+	"\theartbeat\x18\v \x01(\v2\x1d.ryvion.node.v1.NodeHeartbeatH\x00R\theartbeat\x127\n" +
 	"\areceipt\x18\x0e \x01(\v2\x1b.ryvion.node.v1.WorkReceiptH\x00R\areceipt\x12P\n" +
 	"\x12work_lease_request\x18\x0f \x01(\v2 .ryvion.node.v1.WorkLeaseRequestH\x00R\x10workLeaseRequest\x127\n" +
 	"\tsignature\x18d \x01(\v2\x19.ryvion.node.v1.SignatureR\tsignatureB\t\n" +
-	"\apayload\"\x90\x06\n" +
+	"\apayloadJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eR\x12draft_packet_batchR\x0fverifier_result\"\xb7\x04\n" +
 	"\tHubToNode\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12+\n" +
@@ -2018,17 +1403,13 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"assignment\x18\n" +
 	" \x01(\v2\x1e.ryvion.node.v1.WorkAssignmentH\x00R\n" +
 	"assignment\x124\n" +
-	"\x05abort\x18\v \x01(\v2\x1c.ryvion.node.v1.AbortCommandH\x00R\x05abort\x12C\n" +
-	"\rdraft_command\x18\f \x01(\v2\x1c.ryvion.node.v1.DraftCommandH\x00R\fdraftCommand\x12L\n" +
-	"\x10verifier_command\x18\r \x01(\v2\x1f.ryvion.node.v1.VerifierCommandH\x00R\x0fverifierCommand\x12G\n" +
-	"\fruntime_warm\x18\x0e \x01(\v2\".ryvion.node.v1.RuntimeWarmCommandH\x00R\vruntimeWarm\x12*\n" +
+	"\x05abort\x18\v \x01(\v2\x1c.ryvion.node.v1.AbortCommandH\x00R\x05abort\x12*\n" +
 	"\x04ping\x18\x0f \x01(\v2\x14.ryvion.node.v1.PingH\x00R\x04ping\x12G\n" +
 	"\rheartbeat_ack\x18\x10 \x01(\v2 .ryvion.node.v1.NodeHeartbeatAckH\x00R\fheartbeatAck\x12D\n" +
 	"\x0ework_lease_ack\x18\x11 \x01(\v2\x1c.ryvion.node.v1.WorkLeaseAckH\x00R\fworkLeaseAck\x12A\n" +
 	"\vreceipt_ack\x18\x12 \x01(\v2\x1e.ryvion.node.v1.WorkReceiptAckH\x00R\n" +
-	"receiptAck\x12Z\n" +
-	"\x16draft_packet_batch_ack\x18\x13 \x01(\v2#.ryvion.node.v1.DraftPacketBatchAckH\x00R\x13draftPacketBatchAckB\t\n" +
-	"\apayload\"^\n" +
+	"receiptAckB\t\n" +
+	"\apayloadJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fJ\x04\b\x13\x10\x14R\rdraft_commandR\x10verifier_commandR\fruntime_warmR\x16draft_packet_batch_ack\"^\n" +
 	"\tSignature\x12\x15\n" +
 	"\x06key_id\x18\x01 \x01(\tR\x05keyId\x12\x1c\n" +
 	"\talgorithm\x18\x02 \x01(\tR\talgorithm\x12\x1c\n" +
@@ -2113,54 +1494,9 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\amessage\x18\x05 \x01(\tR\amessage\"=\n" +
 	"\fAbortCommand\x12\x15\n" +
 	"\x06job_id\x18\x01 \x01(\tR\x05jobId\x12\x16\n" +
-	"\x06reason\x18\x02 \x01(\tR\x06reason\"\xf4\x01\n" +
-	"\fDraftCommand\x12\x15\n" +
-	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1b\n" +
-	"\twindow_id\x18\x02 \x01(\tR\bwindowId\x12!\n" +
-	"\fworkgraph_id\x18\x03 \x01(\tR\vworkgraphId\x12\x1f\n" +
-	"\vprefix_hash\x18\x04 \x01(\tR\n" +
-	"prefixHash\x12\x18\n" +
-	"\ahorizon\x18\x05 \x01(\rR\ahorizon\x12!\n" +
-	"\fbranch_count\x18\x06 \x01(\rR\vbranchCount\x12/\n" +
-	"\x06policy\x18\a \x01(\v2\x17.google.protobuf.StructR\x06policy\"\xb1\x01\n" +
-	"\x0fVerifierCommand\x12\x15\n" +
-	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1d\n" +
-	"\n" +
-	"session_id\x18\x02 \x01(\tR\tsessionId\x12\x1d\n" +
-	"\n" +
-	"command_id\x18\x03 \x01(\tR\tcommandId\x12\x16\n" +
-	"\x06method\x18\x04 \x01(\tR\x06method\x121\n" +
-	"\apayload\x18\x05 \x01(\v2\x17.google.protobuf.StructR\apayload\"\x8e\x01\n" +
-	"\x12RuntimeWarmCommand\x12\x19\n" +
-	"\bmodel_id\x18\x01 \x01(\tR\amodelId\x12\x1d\n" +
-	"\n" +
-	"model_path\x18\x02 \x01(\tR\tmodelPath\x12>\n" +
-	"\x0eruntime_tuning\x18\x03 \x01(\v2\x17.google.protobuf.StructR\rruntimeTuning\"\x1c\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\"\x1c\n" +
 	"\x04Ping\x12\x14\n" +
-	"\x05nonce\x18\x01 \x01(\tR\x05nonce\"\x84\x01\n" +
-	"\x10DraftPacketBatch\x12\x15\n" +
-	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1b\n" +
-	"\twindow_id\x18\x02 \x01(\tR\bwindowId\x12<\n" +
-	"\apackets\x18\x03 \x03(\v2\".ryvion.speculative.v1.DraftPacketR\apackets\"f\n" +
-	"\x13DraftPacketDecision\x12\x1b\n" +
-	"\tpacket_id\x18\x01 \x01(\tR\bpacketId\x12\x1a\n" +
-	"\baccepted\x18\x02 \x01(\bR\baccepted\x12\x16\n" +
-	"\x06reason\x18\x03 \x01(\tR\x06reason\"\xf2\x01\n" +
-	"\x13DraftPacketBatchAck\x12%\n" +
-	"\x0eschema_version\x18\x01 \x01(\tR\rschemaVersion\x12\x1b\n" +
-	"\twindow_id\x18\x02 \x01(\tR\bwindowId\x12\x1c\n" +
-	"\tattempted\x18\x03 \x01(\rR\tattempted\x12\x1a\n" +
-	"\baccepted\x18\x04 \x01(\rR\baccepted\x12\x1a\n" +
-	"\brejected\x18\x05 \x01(\rR\brejected\x12A\n" +
-	"\tdecisions\x18\x06 \x03(\v2#.ryvion.node.v1.DraftPacketDecisionR\tdecisions\"\xe7\x01\n" +
-	"\x0eVerifierResult\x12\x15\n" +
-	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1d\n" +
-	"\n" +
-	"command_id\x18\x02 \x01(\tR\tcommandId\x12\x19\n" +
-	"\btree_cid\x18\x03 \x01(\tR\atreeCid\x12!\n" +
-	"\faccepted_len\x18\x04 \x01(\rR\vacceptedLen\x12.\n" +
-	"\x13accepted_token_hash\x18\x05 \x01(\tR\x11acceptedTokenHash\x121\n" +
-	"\areceipt\x18\x06 \x01(\v2\x17.google.protobuf.StructR\areceipt\"\xce\x01\n" +
+	"\x05nonce\x18\x01 \x01(\tR\x05nonce\"\xce\x01\n" +
 	"\vWorkReceipt\x12\x15\n" +
 	"\x06job_id\x18\x01 \x01(\tR\x05jobId\x12$\n" +
 	"\x0epublic_key_hex\x18\x02 \x01(\tR\fpublicKeyHex\x12&\n" +
@@ -2189,7 +1525,7 @@ func file_ryvion_node_v1_gateway_proto_rawDescGZIP() []byte {
 	return file_ryvion_node_v1_gateway_proto_rawDescData
 }
 
-var file_ryvion_node_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_ryvion_node_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_ryvion_node_v1_gateway_proto_goTypes = []any{
 	(*NodeToHub)(nil),           // 0: ryvion.node.v1.NodeToHub
 	(*HubToNode)(nil),           // 1: ryvion.node.v1.HubToNode
@@ -2202,56 +1538,36 @@ var file_ryvion_node_v1_gateway_proto_goTypes = []any{
 	(*WorkLeaseRequest)(nil),    // 8: ryvion.node.v1.WorkLeaseRequest
 	(*WorkLeaseAck)(nil),        // 9: ryvion.node.v1.WorkLeaseAck
 	(*AbortCommand)(nil),        // 10: ryvion.node.v1.AbortCommand
-	(*DraftCommand)(nil),        // 11: ryvion.node.v1.DraftCommand
-	(*VerifierCommand)(nil),     // 12: ryvion.node.v1.VerifierCommand
-	(*RuntimeWarmCommand)(nil),  // 13: ryvion.node.v1.RuntimeWarmCommand
-	(*Ping)(nil),                // 14: ryvion.node.v1.Ping
-	(*DraftPacketBatch)(nil),    // 15: ryvion.node.v1.DraftPacketBatch
-	(*DraftPacketDecision)(nil), // 16: ryvion.node.v1.DraftPacketDecision
-	(*DraftPacketBatchAck)(nil), // 17: ryvion.node.v1.DraftPacketBatchAck
-	(*VerifierResult)(nil),      // 18: ryvion.node.v1.VerifierResult
-	(*WorkReceipt)(nil),         // 19: ryvion.node.v1.WorkReceipt
-	(*WorkReceiptAck)(nil),      // 20: ryvion.node.v1.WorkReceiptAck
-	(*structpb.Struct)(nil),     // 21: google.protobuf.Struct
-	(*v1.DraftPacket)(nil),      // 22: ryvion.speculative.v1.DraftPacket
+	(*Ping)(nil),                // 11: ryvion.node.v1.Ping
+	(*WorkReceipt)(nil),         // 12: ryvion.node.v1.WorkReceipt
+	(*WorkReceiptAck)(nil),      // 13: ryvion.node.v1.WorkReceiptAck
+	(*structpb.Struct)(nil),     // 14: google.protobuf.Struct
 }
 var file_ryvion_node_v1_gateway_proto_depIdxs = []int32{
 	3,  // 0: ryvion.node.v1.NodeToHub.hello:type_name -> ryvion.node.v1.NodeHello
 	4,  // 1: ryvion.node.v1.NodeToHub.heartbeat:type_name -> ryvion.node.v1.NodeHeartbeat
-	15, // 2: ryvion.node.v1.NodeToHub.draft_packet_batch:type_name -> ryvion.node.v1.DraftPacketBatch
-	18, // 3: ryvion.node.v1.NodeToHub.verifier_result:type_name -> ryvion.node.v1.VerifierResult
-	19, // 4: ryvion.node.v1.NodeToHub.receipt:type_name -> ryvion.node.v1.WorkReceipt
-	8,  // 5: ryvion.node.v1.NodeToHub.work_lease_request:type_name -> ryvion.node.v1.WorkLeaseRequest
-	2,  // 6: ryvion.node.v1.NodeToHub.signature:type_name -> ryvion.node.v1.Signature
-	6,  // 7: ryvion.node.v1.HubToNode.assignment:type_name -> ryvion.node.v1.WorkAssignment
-	10, // 8: ryvion.node.v1.HubToNode.abort:type_name -> ryvion.node.v1.AbortCommand
-	11, // 9: ryvion.node.v1.HubToNode.draft_command:type_name -> ryvion.node.v1.DraftCommand
-	12, // 10: ryvion.node.v1.HubToNode.verifier_command:type_name -> ryvion.node.v1.VerifierCommand
-	13, // 11: ryvion.node.v1.HubToNode.runtime_warm:type_name -> ryvion.node.v1.RuntimeWarmCommand
-	14, // 12: ryvion.node.v1.HubToNode.ping:type_name -> ryvion.node.v1.Ping
-	5,  // 13: ryvion.node.v1.HubToNode.heartbeat_ack:type_name -> ryvion.node.v1.NodeHeartbeatAck
-	9,  // 14: ryvion.node.v1.HubToNode.work_lease_ack:type_name -> ryvion.node.v1.WorkLeaseAck
-	20, // 15: ryvion.node.v1.HubToNode.receipt_ack:type_name -> ryvion.node.v1.WorkReceiptAck
-	17, // 16: ryvion.node.v1.HubToNode.draft_packet_batch_ack:type_name -> ryvion.node.v1.DraftPacketBatchAck
-	21, // 17: ryvion.node.v1.NodeHeartbeat.capability_payload:type_name -> google.protobuf.Struct
-	21, // 18: ryvion.node.v1.NodeHeartbeat.network_profile:type_name -> google.protobuf.Struct
-	7,  // 19: ryvion.node.v1.WorkAssignment.runtime_requirements:type_name -> ryvion.node.v1.RuntimeRequirements
-	6,  // 20: ryvion.node.v1.WorkLeaseAck.assignment:type_name -> ryvion.node.v1.WorkAssignment
-	21, // 21: ryvion.node.v1.DraftCommand.policy:type_name -> google.protobuf.Struct
-	21, // 22: ryvion.node.v1.VerifierCommand.payload:type_name -> google.protobuf.Struct
-	21, // 23: ryvion.node.v1.RuntimeWarmCommand.runtime_tuning:type_name -> google.protobuf.Struct
-	22, // 24: ryvion.node.v1.DraftPacketBatch.packets:type_name -> ryvion.speculative.v1.DraftPacket
-	16, // 25: ryvion.node.v1.DraftPacketBatchAck.decisions:type_name -> ryvion.node.v1.DraftPacketDecision
-	21, // 26: ryvion.node.v1.VerifierResult.receipt:type_name -> google.protobuf.Struct
-	21, // 27: ryvion.node.v1.WorkReceipt.metadata:type_name -> google.protobuf.Struct
-	21, // 28: ryvion.node.v1.WorkReceiptAck.metadata:type_name -> google.protobuf.Struct
-	0,  // 29: ryvion.node.v1.NodeGateway.Connect:input_type -> ryvion.node.v1.NodeToHub
-	1,  // 30: ryvion.node.v1.NodeGateway.Connect:output_type -> ryvion.node.v1.HubToNode
-	30, // [30:31] is the sub-list for method output_type
-	29, // [29:30] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	12, // 2: ryvion.node.v1.NodeToHub.receipt:type_name -> ryvion.node.v1.WorkReceipt
+	8,  // 3: ryvion.node.v1.NodeToHub.work_lease_request:type_name -> ryvion.node.v1.WorkLeaseRequest
+	2,  // 4: ryvion.node.v1.NodeToHub.signature:type_name -> ryvion.node.v1.Signature
+	6,  // 5: ryvion.node.v1.HubToNode.assignment:type_name -> ryvion.node.v1.WorkAssignment
+	10, // 6: ryvion.node.v1.HubToNode.abort:type_name -> ryvion.node.v1.AbortCommand
+	11, // 7: ryvion.node.v1.HubToNode.ping:type_name -> ryvion.node.v1.Ping
+	5,  // 8: ryvion.node.v1.HubToNode.heartbeat_ack:type_name -> ryvion.node.v1.NodeHeartbeatAck
+	9,  // 9: ryvion.node.v1.HubToNode.work_lease_ack:type_name -> ryvion.node.v1.WorkLeaseAck
+	13, // 10: ryvion.node.v1.HubToNode.receipt_ack:type_name -> ryvion.node.v1.WorkReceiptAck
+	14, // 11: ryvion.node.v1.NodeHeartbeat.capability_payload:type_name -> google.protobuf.Struct
+	14, // 12: ryvion.node.v1.NodeHeartbeat.network_profile:type_name -> google.protobuf.Struct
+	7,  // 13: ryvion.node.v1.WorkAssignment.runtime_requirements:type_name -> ryvion.node.v1.RuntimeRequirements
+	6,  // 14: ryvion.node.v1.WorkLeaseAck.assignment:type_name -> ryvion.node.v1.WorkAssignment
+	14, // 15: ryvion.node.v1.WorkReceipt.metadata:type_name -> google.protobuf.Struct
+	14, // 16: ryvion.node.v1.WorkReceiptAck.metadata:type_name -> google.protobuf.Struct
+	0,  // 17: ryvion.node.v1.NodeGateway.Connect:input_type -> ryvion.node.v1.NodeToHub
+	1,  // 18: ryvion.node.v1.NodeGateway.Connect:output_type -> ryvion.node.v1.HubToNode
+	18, // [18:19] is the sub-list for method output_type
+	17, // [17:18] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_ryvion_node_v1_gateway_proto_init() }
@@ -2262,22 +1578,16 @@ func file_ryvion_node_v1_gateway_proto_init() {
 	file_ryvion_node_v1_gateway_proto_msgTypes[0].OneofWrappers = []any{
 		(*NodeToHub_Hello)(nil),
 		(*NodeToHub_Heartbeat)(nil),
-		(*NodeToHub_DraftPacketBatch)(nil),
-		(*NodeToHub_VerifierResult)(nil),
 		(*NodeToHub_Receipt)(nil),
 		(*NodeToHub_WorkLeaseRequest)(nil),
 	}
 	file_ryvion_node_v1_gateway_proto_msgTypes[1].OneofWrappers = []any{
 		(*HubToNode_Assignment)(nil),
 		(*HubToNode_Abort)(nil),
-		(*HubToNode_DraftCommand)(nil),
-		(*HubToNode_VerifierCommand)(nil),
-		(*HubToNode_RuntimeWarm)(nil),
 		(*HubToNode_Ping)(nil),
 		(*HubToNode_HeartbeatAck)(nil),
 		(*HubToNode_WorkLeaseAck)(nil),
 		(*HubToNode_ReceiptAck)(nil),
-		(*HubToNode_DraftPacketBatchAck)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2285,7 +1595,7 @@ func file_ryvion_node_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ryvion_node_v1_gateway_proto_rawDesc), len(file_ryvion_node_v1_gateway_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

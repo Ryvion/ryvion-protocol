@@ -27,7 +27,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // NodeGateway is the canonical outbound node-to-hub control stream.
-// Public buyer APIs remain HTTP/OpenAI-compatible; this service is internal.
+// Public buyer APIs remain HTTP; this service is internal.
 type NodeGatewayClient interface {
 	Connect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[NodeToHub, HubToNode], error)
 }
@@ -58,7 +58,7 @@ type NodeGateway_ConnectClient = grpc.BidiStreamingClient[NodeToHub, HubToNode]
 // for forward compatibility.
 //
 // NodeGateway is the canonical outbound node-to-hub control stream.
-// Public buyer APIs remain HTTP/OpenAI-compatible; this service is internal.
+// Public buyer APIs remain HTTP; this service is internal.
 type NodeGatewayServer interface {
 	Connect(grpc.BidiStreamingServer[NodeToHub, HubToNode]) error
 	mustEmbedUnimplementedNodeGatewayServer()

@@ -5,10 +5,9 @@ package ryvion.node.v1;
 option go_package = "github.com/Ryvion/ryvion-protocol/gen/go/ryvion/node/v1;nodev1";
 
 import "google/protobuf/struct.proto";
-import "ryvion/speculative/v1/draft_packet.proto";
 
 // NodeGateway is the canonical outbound node-to-hub control stream.
-// Public buyer APIs remain HTTP/OpenAI-compatible; this service is internal.
+// Public buyer APIs remain HTTP; this service is internal.
 service NodeGateway {
   rpc Connect(stream NodeToHub) returns (stream HubToNode);
 }
@@ -21,13 +20,14 @@ message NodeToHub {
   oneof payload {
     NodeHello hello = 10;
     NodeHeartbeat heartbeat = 11;
-    DraftPacketBatch draft_packet_batch = 12;
-    VerifierResult verifier_result = 13;
     WorkReceipt receipt = 14;
     WorkLeaseRequest work_lease_request = 15;
   }
 
   Signature signature = 100;
+
+  reserved 12, 13;
+  reserved "draft_packet_batch", "verifier_result";
 }
 
 message HubToNode {
@@ -37,15 +37,14 @@ message HubToNode {
   oneof payload {
     WorkAssignment assignment = 10;
     AbortCommand abort = 11;
-    DraftCommand draft_command = 12;
-    VerifierCommand verifier_command = 13;
-    RuntimeWarmCommand runtime_warm = 14;
     Ping ping = 15;
     NodeHeartbeatAck heartbeat_ack = 16;
     WorkLeaseAck work_lease_ack = 17;
     WorkReceiptAck receipt_ack = 18;
-    DraftPacketBatchAck draft_packet_batch_ack = 19;
   }
+
+  reserved 12, 13, 14, 19;
+  reserved "draft_command", "verifier_command", "runtime_warm", "draft_packet_batch_ack";
 }
 
 message Signature {
@@ -141,62 +140,8 @@ message AbortCommand {
   string reason = 2;
 }
 
-message DraftCommand {
-  string run_id = 1;
-  string window_id = 2;
-  string workgraph_id = 3;
-  string prefix_hash = 4;
-  uint32 horizon = 5;
-  uint32 branch_count = 6;
-  google.protobuf.Struct policy = 7;
-}
-
-message VerifierCommand {
-  string run_id = 1;
-  string session_id = 2;
-  string command_id = 3;
-  string method = 4;
-  google.protobuf.Struct payload = 5;
-}
-
-message RuntimeWarmCommand {
-  string model_id = 1;
-  string model_path = 2;
-  google.protobuf.Struct runtime_tuning = 3;
-}
-
 message Ping {
   string nonce = 1;
-}
-
-message DraftPacketBatch {
-  string run_id = 1;
-  string window_id = 2;
-  repeated ryvion.speculative.v1.DraftPacket packets = 3;
-}
-
-message DraftPacketDecision {
-  string packet_id = 1;
-  bool accepted = 2;
-  string reason = 3;
-}
-
-message DraftPacketBatchAck {
-  string schema_version = 1;
-  string window_id = 2;
-  uint32 attempted = 3;
-  uint32 accepted = 4;
-  uint32 rejected = 5;
-  repeated DraftPacketDecision decisions = 6;
-}
-
-message VerifierResult {
-  string run_id = 1;
-  string command_id = 2;
-  string tree_cid = 3;
-  uint32 accepted_len = 4;
-  string accepted_token_hash = 5;
-  google.protobuf.Struct receipt = 6;
 }
 
 message WorkReceipt {
