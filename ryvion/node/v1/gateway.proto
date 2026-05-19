@@ -97,13 +97,14 @@ message WorkAssignment {
   string spec_json = 5;
   string executor_kind = 6;
   uint32 units = 7;
-  // Deprecated: older nodes used this as the active abort/lease scope.
-  string workgraph_id = 8;
   string job_pubkey = 9;
   uint64 price_per_unit = 10;
   string assurance_class = 11;
   RuntimeRequirements runtime_requirements = 12;
   string abort_scope_id = 13;
+
+  reserved 8;
+  reserved "workgraph_id";
 }
 
 message RuntimeRequirements {
