@@ -97,11 +97,13 @@ message WorkAssignment {
   string spec_json = 5;
   string executor_kind = 6;
   uint32 units = 7;
+  // Deprecated: older nodes used this as the active abort/lease scope.
   string workgraph_id = 8;
   string job_pubkey = 9;
   uint64 price_per_unit = 10;
   string assurance_class = 11;
   RuntimeRequirements runtime_requirements = 12;
+  string abort_scope_id = 13;
 }
 
 message RuntimeRequirements {
@@ -109,6 +111,7 @@ message RuntimeRequirements {
   bool needs_managed_oci = 2;
   bool needs_managed_oci_gpu = 3;
   bool needs_ryvion_runtime = 4;
+  bool needs_llama_cpp = 13;
   repeated string tooling = 8;
   uint64 min_disk_gb = 9;
   uint32 min_vram_mb = 10;

@@ -731,19 +731,21 @@ func (x *NodeHeartbeatAck) GetLatestVersion() string {
 }
 
 type WorkAssignment struct {
-	state               protoimpl.MessageState `protogen:"open.v1"`
-	JobId               string                 `protobuf:"bytes,1,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
-	Kind                string                 `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
-	PayloadUrl          string                 `protobuf:"bytes,3,opt,name=payload_url,json=payloadUrl,proto3" json:"payload_url,omitempty"`
-	Image               string                 `protobuf:"bytes,4,opt,name=image,proto3" json:"image,omitempty"`
-	SpecJson            string                 `protobuf:"bytes,5,opt,name=spec_json,json=specJson,proto3" json:"spec_json,omitempty"`
-	ExecutorKind        string                 `protobuf:"bytes,6,opt,name=executor_kind,json=executorKind,proto3" json:"executor_kind,omitempty"`
-	Units               uint32                 `protobuf:"varint,7,opt,name=units,proto3" json:"units,omitempty"`
-	WorkgraphId         string                 `protobuf:"bytes,8,opt,name=workgraph_id,json=workgraphId,proto3" json:"workgraph_id,omitempty"`
-	JobPubkey           string                 `protobuf:"bytes,9,opt,name=job_pubkey,json=jobPubkey,proto3" json:"job_pubkey,omitempty"`
-	PricePerUnit        uint64                 `protobuf:"varint,10,opt,name=price_per_unit,json=pricePerUnit,proto3" json:"price_per_unit,omitempty"`
-	AssuranceClass      string                 `protobuf:"bytes,11,opt,name=assurance_class,json=assuranceClass,proto3" json:"assurance_class,omitempty"`
-	RuntimeRequirements *RuntimeRequirements   `protobuf:"bytes,12,opt,name=runtime_requirements,json=runtimeRequirements,proto3" json:"runtime_requirements,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	JobId        string                 `protobuf:"bytes,1,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	Kind         string                 `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
+	PayloadUrl   string                 `protobuf:"bytes,3,opt,name=payload_url,json=payloadUrl,proto3" json:"payload_url,omitempty"`
+	Image        string                 `protobuf:"bytes,4,opt,name=image,proto3" json:"image,omitempty"`
+	SpecJson     string                 `protobuf:"bytes,5,opt,name=spec_json,json=specJson,proto3" json:"spec_json,omitempty"`
+	ExecutorKind string                 `protobuf:"bytes,6,opt,name=executor_kind,json=executorKind,proto3" json:"executor_kind,omitempty"`
+	Units        uint32                 `protobuf:"varint,7,opt,name=units,proto3" json:"units,omitempty"`
+	// Deprecated: older nodes used this as the active abort/lease scope.
+	WorkgraphId         string               `protobuf:"bytes,8,opt,name=workgraph_id,json=workgraphId,proto3" json:"workgraph_id,omitempty"`
+	JobPubkey           string               `protobuf:"bytes,9,opt,name=job_pubkey,json=jobPubkey,proto3" json:"job_pubkey,omitempty"`
+	PricePerUnit        uint64               `protobuf:"varint,10,opt,name=price_per_unit,json=pricePerUnit,proto3" json:"price_per_unit,omitempty"`
+	AssuranceClass      string               `protobuf:"bytes,11,opt,name=assurance_class,json=assuranceClass,proto3" json:"assurance_class,omitempty"`
+	RuntimeRequirements *RuntimeRequirements `protobuf:"bytes,12,opt,name=runtime_requirements,json=runtimeRequirements,proto3" json:"runtime_requirements,omitempty"`
+	AbortScopeId        string               `protobuf:"bytes,13,opt,name=abort_scope_id,json=abortScopeId,proto3" json:"abort_scope_id,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -862,12 +864,20 @@ func (x *WorkAssignment) GetRuntimeRequirements() *RuntimeRequirements {
 	return nil
 }
 
+func (x *WorkAssignment) GetAbortScopeId() string {
+	if x != nil {
+		return x.AbortScopeId
+	}
+	return ""
+}
+
 type RuntimeRequirements struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	NeedsGpu           bool                   `protobuf:"varint,1,opt,name=needs_gpu,json=needsGpu,proto3" json:"needs_gpu,omitempty"`
 	NeedsManagedOci    bool                   `protobuf:"varint,2,opt,name=needs_managed_oci,json=needsManagedOci,proto3" json:"needs_managed_oci,omitempty"`
 	NeedsManagedOciGpu bool                   `protobuf:"varint,3,opt,name=needs_managed_oci_gpu,json=needsManagedOciGpu,proto3" json:"needs_managed_oci_gpu,omitempty"`
 	NeedsRyvionRuntime bool                   `protobuf:"varint,4,opt,name=needs_ryvion_runtime,json=needsRyvionRuntime,proto3" json:"needs_ryvion_runtime,omitempty"`
+	NeedsLlamaCpp      bool                   `protobuf:"varint,13,opt,name=needs_llama_cpp,json=needsLlamaCpp,proto3" json:"needs_llama_cpp,omitempty"`
 	Tooling            []string               `protobuf:"bytes,8,rep,name=tooling,proto3" json:"tooling,omitempty"`
 	MinDiskGb          uint64                 `protobuf:"varint,9,opt,name=min_disk_gb,json=minDiskGb,proto3" json:"min_disk_gb,omitempty"`
 	MinVramMb          uint32                 `protobuf:"varint,10,opt,name=min_vram_mb,json=minVramMb,proto3" json:"min_vram_mb,omitempty"`
@@ -931,6 +941,13 @@ func (x *RuntimeRequirements) GetNeedsManagedOciGpu() bool {
 func (x *RuntimeRequirements) GetNeedsRyvionRuntime() bool {
 	if x != nil {
 		return x.NeedsRyvionRuntime
+	}
+	return false
+}
+
+func (x *RuntimeRequirements) GetNeedsLlamaCpp() bool {
+	if x != nil {
+		return x.NeedsLlamaCpp
 	}
 	return false
 }
@@ -1424,7 +1441,7 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x16has_capability_profile\x18\f \x01(\bR\x14hasCapabilityProfile\x12&\n" +
 	"\x0fhub_instance_id\x18\r \x01(\tR\rhubInstanceId\x126\n" +
 	"\x17ignored_optional_fields\x18\x0e \x03(\tR\x15ignoredOptionalFields\x12%\n" +
-	"\x0elatest_version\x18\x0f \x01(\tR\rlatestVersion\"\xb3\x03\n" +
+	"\x0elatest_version\x18\x0f \x01(\tR\rlatestVersion\"\xd9\x03\n" +
 	"\x0eWorkAssignment\x12\x15\n" +
 	"\x06job_id\x18\x01 \x01(\tR\x05jobId\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x1f\n" +
@@ -1440,12 +1457,14 @@ const file_ryvion_node_v1_gateway_proto_rawDesc = "" +
 	"\x0eprice_per_unit\x18\n" +
 	" \x01(\x04R\fpricePerUnit\x12'\n" +
 	"\x0fassurance_class\x18\v \x01(\tR\x0eassuranceClass\x12V\n" +
-	"\x14runtime_requirements\x18\f \x01(\v2#.ryvion.node.v1.RuntimeRequirementsR\x13runtimeRequirements\"\xf4\x02\n" +
+	"\x14runtime_requirements\x18\f \x01(\v2#.ryvion.node.v1.RuntimeRequirementsR\x13runtimeRequirements\x12$\n" +
+	"\x0eabort_scope_id\x18\r \x01(\tR\fabortScopeId\"\x9c\x03\n" +
 	"\x13RuntimeRequirements\x12\x1b\n" +
 	"\tneeds_gpu\x18\x01 \x01(\bR\bneedsGpu\x12*\n" +
 	"\x11needs_managed_oci\x18\x02 \x01(\bR\x0fneedsManagedOci\x121\n" +
 	"\x15needs_managed_oci_gpu\x18\x03 \x01(\bR\x12needsManagedOciGpu\x120\n" +
-	"\x14needs_ryvion_runtime\x18\x04 \x01(\bR\x12needsRyvionRuntime\x12\x18\n" +
+	"\x14needs_ryvion_runtime\x18\x04 \x01(\bR\x12needsRyvionRuntime\x12&\n" +
+	"\x0fneeds_llama_cpp\x18\r \x01(\bR\rneedsLlamaCpp\x12\x18\n" +
 	"\atooling\x18\b \x03(\tR\atooling\x12\x1e\n" +
 	"\vmin_disk_gb\x18\t \x01(\x04R\tminDiskGb\x12\x1e\n" +
 	"\vmin_vram_mb\x18\n" +
